@@ -1,0 +1,280 @@
+\documentclass[aspectratio=169]{beamer}
+
+% =========================
+% PAQUETES
+% =========================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{xcolor}
+
+% =========================
+% TEMA
+% =========================
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{%
+    \hfill
+    \raisebox{1.4ex}[0pt][0pt]{%
+        \scriptsize\insertframenumber\,/\,\inserttotalframenumber\hspace*{1ex}%
+    }%
+    \vspace{1.5ex}%
+}
+
+% =========================
+% INFORMACIÓN
+% =========================
+\title{Localización de una Fuente Sísmica \\
+mediante un Problema Inverso y Datos Simulados}
+
+\subtitle{Proyecto de Cálculo Multivariado}
+
+\author{
+Danilo \and Luis \and David \and Alejandro \and Kevin
+}
+
+\institute{
+Ingeniería de Software
+}
+
+\date{2026}
+
+% =========================
+% DOCUMENTO
+% =========================
+\begin{document}
+
+% =========================
+% PORTADA
+% =========================
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% =========================
+% DIAPO DANILO
+% =========================
+
+\begin{frame}{Danilo — Introducción y Modelo Matemático}
+
+\textbf{Rol en la exposición:}
+
+Introducir el problema sísmico y explicar el modelo matemático base.
+
+\vspace{0.4cm}
+
+\textbf{Todo lo que debe decir:}
+
+\begin{itemize}
+    \item Explicar qué se busca en el proyecto.
+    \item Definir qué es una fuente sísmica.
+    \item Explicar qué representan los sensores.
+    \item Explicar la idea general del problema inverso.
+    \item Diferenciar problema directo vs problema inverso.
+    \item Explicar por qué se usa cálculo multivariado.
+    \item Introducir el modelo de atenuación sísmica.
+    \item Explicar qué representa la amplitud inicial $A_0$.
+    \item Explicar qué representa la distancia $R_i$.
+    \item Explicar por qué la amplitud disminuye con la distancia.
+    \item Introducir la fórmula:
+    
+    $$
+    A_{pred,i}=A_0\frac{e^{-R_i}}{R_i}
+    $$
+
+    \item Explicar que el objetivo es encontrar la ubicación de la fuente.
+    \item Conectar el proyecto con funciones de varias variables.
+\end{itemize}
+
+\end{frame}
+
+% =========================
+% DIAPO LUIS
+% =========================
+
+\begin{frame}{Luis — Simulación de Datos y Sensores}
+
+\textbf{Rol en la exposición:}
+
+Explicar cómo se generaron los datos simulados utilizados en el proyecto.
+
+\vspace{0.4cm}
+
+\textbf{Todo lo que debe decir:}
+
+\begin{itemize}
+    \item Explicar que esta parte corresponde al problema directo.
+    \item Presentar la fuente sísmica real simulada.
+    \item Explicar las coordenadas de la fuente.
+    \item Explicar por qué $z$ es negativo.
+    \item Explicar el valor usado para $A_0$.
+    \item Explicar cómo se distribuyeron los sensores.
+    \item Explicar por qué se utilizaron 12 sensores.
+    \item Mostrar la distribución espacial de los sensores.
+    \item Explicar la distancia euclidiana en $\mathbb{R}^3$.
+    \item Introducir la fórmula:
+    
+    $$
+    R_i = \sqrt{(x_i-x)^2+(y_i-y)^2+(z_i-z)^2}
+    $$
+
+    \item Explicar cómo se calcularon las amplitudes ideales.
+    \item Explicar qué es el ruido gaussiano.
+    \item Explicar por qué se agregó ruido.
+    \item Explicar cómo se obtuvieron las amplitudes observadas.
+    \item Explicar que los sensores cercanos registran amplitudes mayores.
+    \item Explicar que estos datos serán la entrada del problema inverso.
+\end{itemize}
+
+\end{frame}
+
+% =========================
+% DIAPO DAVID
+% =========================
+
+\begin{frame}{David — Función de Error y Optimización}
+
+\textbf{Rol en la exposición:}
+
+Explicar cómo se construyó la función de error y cómo se encontró el mínimo.
+
+\vspace{0.4cm}
+
+\textbf{Todo lo que debe decir:}
+
+\begin{itemize}
+    \item Explicar qué significa comparar amplitudes observadas y predichas.
+    \item Explicar por qué se construye una función de error.
+    \item Explicar qué significa minimizar el error.
+    \item Explicar por qué se usan mínimos cuadrados.
+    \item Introducir la función:
+    
+    $$
+    E(x,y,z)=\sum_{i=1}^{n}(A_{obs,i}-A_{pred,i})^2
+    $$
+
+    \item Explicar que el mínimo representa la mejor estimación.
+    \item Explicar el método de optimización Nelder-Mead.
+    \item Explicar que también se utilizó búsqueda por grilla como apoyo visual.
+    \item Explicar qué ocurre cuando un punto candidato está cerca de la fuente real.
+    \item Presentar la fuente estimada.
+    \item Comparar fuente real vs fuente estimada.
+    \item Explicar el significado físico del error pequeño obtenido.
+    \item Explicar qué son los residuales.
+    \item Explicar por qué residuales pequeños indican buen ajuste.
+\end{itemize}
+
+\end{frame}
+
+% =========================
+% DIAPO ALEJANDRO
+% =========================
+
+\begin{frame}{Alejandro — Visualización y Mapas de Calor}
+
+\textbf{Rol en la exposición:}
+
+Explicar las visualizaciones de la función de error y la interpretación gráfica.
+
+\vspace{0.4cm}
+
+\textbf{Todo lo que debe decir:}
+
+\begin{itemize}
+    \item Explicar por qué la función $E(x,y,z)$ no se puede visualizar completa fácilmente.
+    \item Explicar qué significa fijar un valor de $z$.
+    \item Explicar los cortes bidimensionales.
+    \item Explicar qué representan los mapas de calor.
+    \item Explicar qué representan las curvas de nivel.
+    \item Explicar cómo identificar regiones de bajo error.
+    \item Explicar el corte en $z=-1.10$.
+    \item Explicar el corte en $z=-1.14$.
+    \item Explicar por qué esos cortes son importantes.
+    \item Explicar cómo cambia el error cuando cambia la profundidad.
+    \item Explicar la gráfica $E_{min}(z)$.
+    \item Explicar la trayectoria del mínimo en el plano $(x,y)$.
+    \item Explicar la animación de cortes en profundidad.
+    \item Explicar que la visualización confirma el resultado numérico.
+\end{itemize}
+
+\end{frame}
+
+% =========================
+% DIAPO KEVIN
+% =========================
+
+\begin{frame}{Kevin — Conclusiones y Defensa Final}
+
+\textbf{Rol en la exposición:}
+
+Cerrar el proyecto, interpretar los resultados y responder preguntas finales.
+
+\vspace{0.4cm}
+
+\textbf{Todo lo que debe decir:}
+
+\begin{itemize}
+    \item Explicar el resultado final del proyecto.
+    \item Explicar que la fuente estimada quedó cerca de la fuente real.
+    \item Explicar qué significa físicamente el mínimo encontrado.
+    \item Explicar por qué el modelo es coherente.
+    \item Explicar la relación entre distancia y amplitud.
+    \item Explicar cómo interviene el cálculo multivariado.
+    \item Explicar la importancia de las funciones de varias variables.
+    \item Explicar la importancia de la optimización.
+    \item Explicar las limitaciones del modelo.
+    \item Explicar posibles mejoras futuras.
+    \item Concluir que el problema inverso pudo resolverse correctamente.
+    \item Cerrar la exposición de manera formal.
+\end{itemize}
+
+\end{frame}
+
+% =========================
+% Limitaciones
+% =========================
+
+\begin{frame}{Limitaciones y Mejoras Futuras}
+
+\textbf{Rol en la exposición:}
+
+Explicar las limitaciones del modelo y posibles mejoras para futuros trabajos.
+
+\vspace{0.4cm}
+
+\textbf{Todo lo que debe decir:}
+
+\begin{itemize}
+    \item Explicar que el modelo de atenuación es simplificado.
+    \item Explicar que no se consideraron efectos de propagación complejos.
+    \item Explicar que el ruido real puede no ser perfectamente gaussiano.
+    \item Explicar que se asumió un medio homogéneo.
+\end{itemize}
+
+\end{frame}
+
+
+% =========================
+% DIAPO FINAL
+% =========================
+
+\begin{frame}{Gracias}
+
+\centering
+
+{\Huge Gracias por su atención}
+
+\vspace{1cm}
+
+Preguntas
+
+\end{frame}
+
+\end{document}
+```

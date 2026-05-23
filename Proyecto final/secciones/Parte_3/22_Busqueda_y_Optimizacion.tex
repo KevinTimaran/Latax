@@ -1,0 +1,52 @@
+\begin{frame}{Estrategia de Búsqueda y Optimización}
+
+    \begin{columns}[T]
+        %========================================
+        % COLUMNA IZQUIERDA: Algoritmos
+        %========================================
+        \column{0.45\textwidth}
+        
+        \begin{block}{1. Nelder-Mead (Principal)}
+            \scriptsize
+            \begin{itemize}
+                \item Algoritmo numérico iterativo.
+                \item Busca el mínimo de la función de error sin usar derivadas.
+            \end{itemize}
+        \end{block}
+
+        \vspace{0.3cm}
+
+        \begin{block}{2. Búsqueda por Grilla (Soporte)}
+            \scriptsize
+            \begin{itemize}
+                \item Exploración espacial estructurada.
+                \item Útil para visualización conceptual, no como optimizador final.
+            \end{itemize}
+        \end{block}
+
+        %========================================
+        % COLUMNA DERECHA: Rangos
+        %========================================
+        \column{0.50\textwidth}
+        
+        \begin{block}{Acotación del Dominio ($x, y, z$)}
+            \centering
+            \scriptsize
+            \vspace{0.1cm}
+            \begin{tabular}{@{}lcc@{}}
+                \toprule
+                \textbf{Eje} & \textbf{Rango} & \textbf{Justificación Física} \\ \midrule
+                $x$ & $[-5, 5]$ & Cobertura horizontal de la red. \\ \vspace{0.1cm}
+                $y$ & $[-5, 5]$ & Cobertura horizontal de la red. \\ \vspace{0.1cm}
+                $z$ & $[-3, 1]$ & Profundidad del hipocentro. \\ \bottomrule
+            \end{tabular}
+        \end{block}
+
+        \vspace{0.4cm}
+        \begin{center}
+            \footnotesize
+            \textbf{Limitar el dominio asegura la convergencia numérica.}
+        \end{center}
+    \end{columns}
+
+\end{frame}

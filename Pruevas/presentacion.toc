@@ -1,0 +1,4 @@
+\beamer@sectionintoc {1}{Problema Directo y Modelo de Atenuación}{3}{0}{1}
+\beamer@sectionintoc {2}{Simulación y Ruido Gaussiano}{4}{0}{2}
+\beamer@sectionintoc {3}{Problema Inverso: La Función de Error}{5}{0}{3}
+\beamer@sectionintoc {4}{Visualización y Curvas de Nivel}{6}{0}{4}

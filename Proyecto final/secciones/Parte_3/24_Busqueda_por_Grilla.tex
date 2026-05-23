@@ -1,0 +1,64 @@
+% Le mono jojoi
+%=============================================
+% 8.1. Explicar que también se utilizó búsqueda por grilla como apoyo visual
+%=============================================
+
+\begin{frame}{Algoritmo Numérico: Búsqueda por Grilla}
+
+    \begin{columns}[T]
+        
+        %=======================================================
+        % COLUMNA IZQUIERDA: BLOQUE VERDE (Pseudocódigo)
+        %=======================================================
+        \column{0.63\textwidth}
+        \begin{exampleblock}{Lógica del Algoritmo de Exploración}
+            \scriptsize % Letra pequeña para que las fórmulas largas quepan sin problema
+            \textbf{Inicialización:} $E_{\text{min}} \leftarrow \infty$ \\[0.15cm]
+            \begin{tabbing}
+                \quad \= \quad \= \quad \= \quad \= \kill
+                $\mathbf{para}$ cada $x$ dentro del rango sugerido $\mathbf{hacer}$ \\
+                \> $\mathbf{para}$ cada $y$ dentro del rango sugerido $\mathbf{hacer}$ \\
+                \> \> $\mathbf{para}$ cada $z$ dentro del rango sugerido $\mathbf{hacer}$ \\[0.1cm]
+                \> \> \> 1. $R_i = \sqrt{(x_i - x)^2 + (y_i - y)^2 + (z_i - z)^2}$ \\
+                \> \> \> 2. $A_{pred,i} = A_0 \frac{e^{-R_i}}{R_i}$ \\
+                \> \> \> 3. $E(x,y,z) = \sum_{i=1}^{n} (A_{obs,i} - A_{pred,i})^2$ \\[0.1cm]
+                \> \> \> $\mathbf{si}$ $E(x,y,z) < E_{\text{min}}$ $\mathbf{entonces}$ \\
+                \> \> \> \> $E_{\text{min}} \leftarrow E(x,y,z)$ \\
+                \> \> \> \> $\text{mejor\_punto} \leftarrow (x,y,z)$
+            \end{tabbing}
+        \end{exampleblock}
+
+        %=======================================================
+        % COLUMNA DERECHA: BLOQUES AZULES APILADOS
+        %=======================================================
+        \column{0.34\textwidth}
+        
+        \begin{block}{Procesamiento Espacial}
+            \scriptsize
+            \begin{itemize}
+                \item \textbf{Discretización:} Evaluación en mallas tridimensionales.
+                \vspace{0.1cm}
+                \item \textbf{Métrica:} Validación simultánea en la red de sensores.
+            \end{itemize}
+        \end{block}
+
+        \vspace{0.3cm}
+
+        \begin{block}{Soporte Conceptual}
+            \scriptsize
+            \begin{itemize}
+                \item \textbf{Topografía:} Mapea la superficie de error.
+                \vspace{0.1cm}
+                \item \textbf{Garantía:} Valida visualmente la existencia del mínimo global.
+            \end{itemize}
+        \end{block}
+
+    \end{columns}
+
+    \vspace{0.3cm}
+    \begin{center}
+        \footnotesize
+        \textbf{La estructura iterativa asegura un rastreo exhaustivo del hipocentro.}
+    \end{center}
+
+\end{frame}

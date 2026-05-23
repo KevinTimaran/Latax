@@ -1,0 +1,50 @@
+% Luchando los dias 
+%============================================
+% 11. Explicar Procedimientos para agregar ruido Gaussiano
+%=============================================
+
+\begin{frame}{Cálculo Paso a Paso: Distancia Euclidiana ($R_1$)}
+
+    \begin{columns}[T]
+        %========================================
+        % COLUMNA IZQUIERDA: Contexto (Reducida al 30%)
+        %========================================
+        \column{0.30\textwidth}
+        \begin{block}{Datos del Sensor 1}
+            \scriptsize
+            \textbf{S1:} $(-4.0, -3.0, 0.2)$ \\
+            \textbf{Fuente:} $(1.2, -0.8, -1.1)$
+        \end{block}
+
+        \vspace{0.4cm}
+
+        \begin{block}{Nota Técnica}
+            \tiny
+            Sustitución de parámetros en la métrica euclidiana para determinar el radio de propagación.
+        \end{block}
+
+        %========================================
+        % COLUMNA DERECHA: Operación (Ampliada al 68%)
+        %========================================
+        \column{0.68\textwidth}
+        \begin{exampleblock}{Procedimiento Detallado}
+            \centering
+            \footnotesize % Tamaño ideal para que la raíz no se corte
+            \begin{align*}
+                R_1 &= \sqrt{(x_1 - x_r)^2 + (y_1 - y_r)^2 + (z_1 - z_r)^2} \\[0.15cm]
+                R_1 &= \sqrt{(-4.0 - 1.2)^2 + (-3.0 - (-0.8))^2 + (0.2 - (-1.1))^2} \\[0.15cm]
+                R_1 &= \sqrt{(-5.2)^2 + (-3.0 + 0.8)^2 + (0.2 + 1.1)^2} \\[0.15cm]
+                R_1 &= \sqrt{(-5.2)^2 + (-2.2)^2 + (1.3)^2} \\[0.15cm]
+                R_1 &= \sqrt{27.04 + 4.84 + 1.69} \\[0.15cm]
+                R_1 &= \sqrt{33.57} \implies \mathbf{R_1 \approx 5.794}
+            \end{align*}
+        \end{exampleblock}
+    \end{columns}
+
+    \vspace{0.3cm}
+    \begin{center}
+        \tiny \textcolor{gray}{Cálculo fundamental para la posterior aplicación del modelo de atenuación.}
+    \end{center}
+
+\end{frame}
+

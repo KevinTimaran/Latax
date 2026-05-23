@@ -1,0 +1,52 @@
+% El tangua
+
+%=============================================
+% 6. Explicar que el mínimo representa la mejor estimación
+%=============================================
+\begin{frame}{Optimización: Interpretación del Mínimo Global}
+
+    \begin{columns}[T]
+        %========================================
+        % COLUMNA IZQUIERDA: El Objetivo Matemático
+        %========================================
+        \column{0.48\textwidth}
+        \begin{block}{Criterio de Optimización}
+            \scriptsize
+            Determinación del punto óptimo en el espacio tridimensional mediante la minimización del error global:
+            \vspace{0.3cm}
+            \[
+            (x^*, y^*, z^*) = \arg\min E(x,y,z)
+            \]
+            \vspace{0.2cm}
+        \end{block}
+
+        \vspace{0.2cm}
+
+        \begin{block}{Validación del Modelo}
+            \scriptsize
+            Un valor residual bajo de $E(x,y,z)$ certifica que las coordenadas evaluadas reproducen con alta fidelidad las amplitudes medidas.
+        \end{block}
+
+        %========================================
+        % COLUMNA DERECHA: ¿Qué significa realmente?
+        %========================================
+        \column{0.48\textwidth}
+        \begin{exampleblock}{Significado Físico-Matemático}
+            \scriptsize
+            El punto mínimo de la función representa:
+            \begin{itemize}
+                \item \textbf{Ajuste Óptimo:} La menor discrepancia físicamente alcanzable respecto a la red de sensores.
+                \vspace{0.3cm}
+                \item \textbf{Consistencia:} Región espacial donde las predicciones teóricas convergen con los datos de campo.
+            \end{itemize}
+        \end{exampleblock}
+    \end{columns}
+
+    \vspace{0.5cm}
+
+    \begin{center}
+        \footnotesize
+        \textbf{"   El mínimo no es solo un valor numérico decreciente; es la posición espacial que mejor explica el evento sísmico real."}
+    \end{center}
+
+\end{frame}

@@ -1,0 +1,53 @@
+\begin{frame}{Resultados: Tabulación de Amplitudes Ideales}
+
+    \begin{columns}[T]
+        %========================================
+        % COLUMNA IZQUIERDA: Tabla de Datos
+        %========================================
+        \column{0.50\textwidth}
+        \begin{block}{Consolidado de Resultados}
+            \centering
+            \scriptsize 
+            \begin{tabular}{@{}lcc@{}}
+                \toprule
+                \textbf{Sensor} & \textbf{Distancia $R_i$} & \textbf{Amplitud $A_{ideal}$} \\ \midrule
+                S1  & 5.7940 & 0.005257 \\
+                S2  & 5.2583 & 0.009897 \\
+                S3  & 5.0912 & 0.012081 \\
+                S4  & 4.5321 & 0.023737 \\
+                S5  & 3.5482 & 0.081097 \\
+                S6  & 3.5833 & 0.077538 \\
+                S7  & 4.4193 & 0.027251 \\
+                S8  & 6.1172 & 0.003604 \\
+                % Fila resaltada únicamente con negrita para evitar errores de compilación
+                \textbf{S9} & \textbf{1.8412} & \textbf{0.861547} \\
+                S10 & 2.4000 & 0.377991 \\
+                S11 & 3.2558 & 0.118410 \\
+                S12 & 4.2107 & 0.035234 \\ \bottomrule
+            \end{tabular}
+        \end{block}
+
+        %========================================
+        % COLUMNA DERECHA: Análisis Resumido
+        %========================================
+        \column{0.45\textwidth}
+        \vspace{0.4cm}
+        
+        \begin{block}{Observaciones Clave}
+            \scriptsize
+            \begin{itemize}
+                \item \textbf{Sensor Crítico (S9):} Menor distancia $\rightarrow$ Mayor amplitud registrada.
+                \vspace{0.4cm}
+                \item \textbf{Atenuación:} El decaimiento es consistente con el modelo exponencial.
+                \vspace{0.4cm}
+                \item \textbf{Uniformidad:} Los resultados servirán de base para el algoritmo de inversión.
+            \end{itemize}
+        \end{block}
+
+        \vspace{0.6cm}
+        \begin{center}
+            \tiny \textit{Amplitudes calculadas mediante $A_{ideal} = A_0 \frac{e^{-R}}{R}$ con $A_0=10$.}
+        \end{center}
+    \end{columns}
+
+\end{frame}

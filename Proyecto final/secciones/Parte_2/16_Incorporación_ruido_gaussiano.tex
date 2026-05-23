@@ -1,0 +1,60 @@
+% Luchando los dias
+%===========================================
+% 16. Incorporación de ruido gaussiano moderado y Explicar Procedimientos para agregar ruido Gaussiano 
+%===========================================
+
+\begin{frame}{Incorporación de Ruido Gaussiano}
+
+    \begin{columns}[T]
+        %========================================
+        % COLUMNA IZQUIERDA: Justificación Física
+        %========================================
+        \column{0.48\textwidth}
+        \begin{block}{¿Por qué añadir ruido?}
+            \scriptsize
+            Para simular condiciones reales de medición:
+            \begin{itemize}
+                \item Errores instrumentales de los sensores.
+                \item Variaciones e irregularidades del medio.
+                \item Pequeñas perturbaciones externas.
+            \end{itemize}
+        \end{block}
+
+        \vspace{0.2cm}
+
+        \begin{block}{Naturaleza del Ruido ($\epsilon_i$)}
+            \scriptsize
+            \begin{itemize}
+                \item \textbf{Distribución Normal:} Media cero ($\mu = 0$).
+                \item \textbf{Imparcialidad:} No introduce tendencias; puede aumentar o disminuir el valor ideal.
+            \end{itemize}
+        \end{block}
+
+        %========================================
+        % COLUMNA DERECHA: Formulación Matemática
+        %========================================
+        \column{0.48\textwidth}
+        \begin{exampleblock}{Modelado Matemático}
+            \centering
+            \footnotesize
+            \textbf{Variación moderada (5\%)}
+            \[ \text{Factor} = 0.05 \]
+            
+            \textbf{Desviación Estándar ($\sigma_i$)}
+            \[ \sigma_i = 0.05 \cdot A_{ideal,i} \]
+            
+            \textbf{Generación de Ruido}
+            \[ \epsilon_i \sim N(0, \sigma_i) \]
+            
+            \textbf{Amplitud Observada}
+            \[ \mathbf{A_{obs,i} = A_{ideal,i} + \epsilon_i} \]
+        \end{exampleblock}
+    \end{columns}
+
+    \vspace{0.4cm}
+    \begin{center}
+        \footnotesize 
+        \textbf{El ruido transforma una simulación perfecta en un escenario de datos realistas.}
+    \end{center}
+
+\end{frame}

@@ -1,0 +1,61 @@
+% El mono jojoi 
+%=============================================
+% . Mostrar los datos utilizados para la estimación 
+%=============================================
+\begin{frame}{Datos Utilizados para la Estimación}
+
+    \begin{columns}[T]
+        %========================================
+        % COLUMNA IZQUIERDA: Tabla de Sensores (Inputs)
+        %========================================
+        \column{0.55\textwidth}
+        \begin{block}{Entradas: Coordenadas y Observaciones}
+            \centering
+            \scriptsize 
+            \begin{tabular}{@{}lcccc@{}}
+                \toprule
+                \textbf{Sensor} & \textbf{$x_i$} & \textbf{$y_i$} & \textbf{$z_i$} & \textbf{$Az_i$ obs.} \\ \midrule
+                S1  & -4.0 & -3.0 &  0.2 & 0.005219 \\
+                S2  & -2.5 &  2.8 & -0.1 & 0.009811 \\
+                S3  &  0.0 &  4.0 &  0.1 & 0.012014 \\
+                S4  &  3.5 &  3.0 & -0.2 & 0.024570 \\
+                S5  &  4.5 & -1.5 &  0.0 & 0.080580 \\
+                S6  &  2.0 & -4.0 &  0.3 & 0.071733 \\
+                S7  & -1.0 & -4.5 & -0.1 & 0.027704 \\
+                S8  & -4.5 &  1.0 &  0.2 & 0.003556 \\
+                \textbf{S9}  & \textbf{0.5} & \textbf{0.5} & \textbf{0.0} & \textbf{0.852201} \\
+                S10 &  2.8 &  0.8 & -0.3 & 0.380182 \\
+                S11 & -1.8 & -1.2 &  0.1 & 0.119785 \\
+                S12 &  1.0 &  3.2 &  0.2 & 0.037284 \\ \bottomrule
+            \end{tabular}
+        \end{block}
+
+        %========================================
+        % COLUMNA DERECHA: Parámetros Clave
+        %========================================
+        \column{0.42\textwidth}
+        \vspace{0.5cm}
+
+        \begin{block}{Parámetros del Problema Inverso}
+            \centering
+            \scriptsize
+            \begin{tabular}{@{}ll@{}}
+                \toprule
+                \textbf{Elemento} & \textbf{Valor} \\ \midrule
+                Fuente real & $(1.2, -0.8, -1.1)$ \\ \vspace{0.1cm}
+                Amplitud inicial & $A_0 = 10$ \\ \vspace{0.1cm}
+                Red instrumental & $12$ sensores \\ \vspace{0.1cm}
+                Dato de ajuste & $Az_i$ observado \\ \bottomrule
+            \end{tabular}
+        \end{block}
+
+        \vspace{0.5cm}
+        
+        \begin{block}{Objetivo}
+            \scriptsize
+            Utilizar el set de datos $Az_i$ para que el algoritmo recupere las coordenadas de la fuente real ocultas en la simulación.
+        \end{block}
+
+    \end{columns}
+
+\end{frame}

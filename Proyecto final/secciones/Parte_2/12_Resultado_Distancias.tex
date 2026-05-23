@@ -1,0 +1,64 @@
+% Luchando los dias
+%============================================
+% 12. Explicar ese valor mínimo y máximo de la tabla 
+%=============================================
+
+\begin{frame}{Resultados: Distancias Calculadas}
+
+    \begin{columns}[c]
+
+        %========================================
+        % COLUMNA IZQUIERDA: Tabla de Resultados
+        %========================================
+        \column{0.58\textwidth}
+        \begin{block}{Distancia a cada Sensor ($R_i$)}
+            \centering
+            \scriptsize 
+            \begin{tabular}{@{}lcccc@{}}
+                \toprule
+                \textbf{Sensor} & \textbf{$x_i$} & \textbf{$y_i$} & \textbf{$z_i$} & \textbf{$R_i$} \\ \midrule
+                S1  & -4.0 & -3.0 &  0.2 & 5.7940 \\
+                S2  & -2.5 &  2.8 & -0.1 & 5.2583 \\
+                S3  &  0.0 &  4.0 &  0.1 & 5.0912 \\
+                S4  &  3.5 &  3.0 & -0.2 & 4.5321 \\
+                S5  &  4.5 & -1.5 &  0.0 & 3.5482 \\
+                S6  &  2.0 & -4.0 &  0.3 & 3.5833 \\
+                S7  & -1.0 & -4.5 & -0.1 & 4.4193 \\
+                S8  & -4.5 &  1.0 &  0.2 & 6.1172 \\
+                S9  &  0.5 &  0.5 &  0.0 & 1.8412 \\
+                S10 &  2.8 &  0.8 & -0.3 & 2.4000 \\
+                S11 & -1.8 & -1.2 &  0.1 & 3.2558 \\
+                S12 &  1.0 &  3.2 &  0.2 & 4.2107 \\ \bottomrule
+            \end{tabular}
+        \end{block}
+
+        %========================================
+        % COLUMNA DERECHA: Análisis Crítico
+        %========================================
+        \column{0.38\textwidth}
+
+        \begin{block}{Análisis de la Red}
+            \scriptsize
+            Resultados tras aplicar la métrica euclidiana desde la fuente real a cada nodo.
+        \end{block}
+
+        \vspace{0.4cm}
+
+        \begin{block}{Valores Críticos}
+            \scriptsize
+            \begin{itemize}
+                \item \textbf{Mínimo:} S9 ($R_9 \approx 1.84$) \\
+                \vspace{0.1cm}
+                $\rightarrow$ \textit{Mayor amplitud esperada.}
+                
+                \vspace{0.4cm}
+                
+                \item \textbf{Máximo:} S8 ($R_8 \approx 6.12$) \\
+                \vspace{0.1cm}
+                $\rightarrow$ \textit{Mayor atenuación (pérdida).}
+            \end{itemize}
+        \end{block}
+
+    \end{columns}
+
+\end{frame}

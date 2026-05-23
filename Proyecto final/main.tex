@@ -1,0 +1,61 @@
+\documentclass[aspectratio=169]{beamer}
+
+% Importamos la configuración limpia
+\input{config/setup}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Contenido}
+    \tableofcontents
+\end{frame}
+
+% Los módulos de la exposición
+
+%===========================================
+%   1. Parte 1: Introducción y Modelo Matemático.
+%===========================================
+\input{secciones/Parte_1/01_introduccion}
+\input{secciones/Parte_1/02_grafica_sismica}
+\input{secciones/Parte_1/03_RepresentacionSensores}
+\input{secciones/Parte_1/04_Directo_vs_Inverso}
+\input{secciones/Parte_1/05_Introducir_atenuación_sísmica}
+\input{secciones/Parte_1/06_distancia_euclidiana}
+
+
+%===========================================
+%   2. Parte 2: Implementación y Resultados.
+%===========================================
+\input{secciones/Parte_2/07_ problema_directo}
+\input{secciones/Parte_2/08_Euclidiana_Interpretacion_Geometrica}
+\input{secciones/Parte_2/09_Distribucio_sensores}
+\input{secciones/Parte_2/10_Generacion_Datos_Simulados}
+\input{secciones/Parte_2/11_Procedimientos_Euclidianao}
+\input{secciones/Parte_2/12_Resultado_Distancias}
+\input{secciones/Parte_2/13_Amplitudes_Ideales}
+\input{secciones/Parte_2/14_amplitudes_calculo}
+\input{secciones/Parte_2/15_Resultado_Amplitud}
+\input{secciones/Parte_2/16_Incorporación_ruido_gaussiano}
+\input{secciones/Parte_2/17_Operacion_Ruido_Gaussiano}
+
+%===========================================
+%   3. Parte 3: Problema Inverso y Comparación de Resultados.
+%===========================================
+\input{secciones/Parte_3/18_Amplitudes_Observadas _Predichas}
+\input{secciones/Parte_3/19_Funcion_de_Error}
+\input{secciones/Parte_3/20_interpretacion_minimo}
+\input{secciones/Parte_3/21_datos_estimacion}
+\input{secciones/Parte_3/22_Busqueda_y_Optimizacion}
+\input{secciones/Parte_3/23_b_nelder_mead}
+\input{secciones/Parte_3/24_Busqueda_por_Grilla}
+\input{secciones/Parte_3/25_b_ejemplo_procedimiento}
+\input{secciones/Parte_3/26_Resultado_Estimacion}
+\input{secciones/Parte_3/27_resultados_estimacion}
+\input{secciones/Parte_3/28_residuales}
+
+
+
+\end{document}

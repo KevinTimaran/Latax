@@ -1,0 +1,54 @@
+% Luchando los dias
+%===========================================
+% 17. Explicar aplicacion de ruido gaussiano y resultados obtenidos
+%===========================================
+
+
+\begin{frame}{Tabulación: Amplitudes Observadas ($A_{obs}$)}
+
+    \begin{columns}[T]
+        %========================================
+        % COLUMNA IZQUIERDA: Tabla de Datos con Ruido
+        %========================================
+        \column{0.65\textwidth}
+        \begin{block}{Cálculo: $A_{obs,i} = A_{ideal,i} + \epsilon_i$}
+            \centering
+            \scriptsize 
+            \begin{tabular}{@{}lcccc@{}}
+                \toprule
+                \textbf{Sensor} & \textbf{$R_i$} & \textbf{$A_{ideal}$} & \textbf{$\epsilon_i$ (5\%)} & \textbf{$A_{obs}$} \\ \midrule
+                S1  & 5.7940 & 0.005257 & +0.000263 & \textbf{0.005520} \\
+                S2  & 5.2583 & 0.009897 & -0.000495 & \textbf{0.009402} \\
+                S3  & 5.0912 & 0.012081 & +0.000604 & \textbf{0.012685} \\
+                S4  & 4.5321 & 0.023737 & -0.001187 & \textbf{0.022550} \\
+                S5  & 3.5482 & 0.081097 & +0.004055 & \textbf{0.085152} \\
+                S6  & 3.5833 & 0.077538 & -0.003877 & \textbf{0.073661} \\
+                S7  & 4.4193 & 0.027251 & +0.001363 & \textbf{0.028614} \\
+                S8  & 6.1172 & 0.003604 & -0.000180 & \textbf{0.003424} \\
+                \textbf{S9} & \textbf{1.8412} & \textbf{0.861547} & \textbf{+0.043077} & \textbf{0.904624} \\
+                S10 & 2.4000 & 0.377991 & -0.018900 & \textbf{0.359091} \\
+                S11 & 3.2558 & 0.118410 & +0.005921 & \textbf{0.124331} \\
+                S12 & 4.2107 & 0.035234 & -0.001762 & \textbf{0.033472} \\ \bottomrule
+            \end{tabular}
+        \end{block}
+
+        %========================================
+        % COLUMNA DERECHA: Análisis Técnico
+        %========================================
+        \column{0.32\textwidth}
+        \vspace{0.8cm}
+        
+        \begin{block}{Datos de Entrada}
+            \scriptsize
+            Estas amplitudes perturbadas constituyen el set de datos real para la inversión sísmica.
+        \end{block}
+
+        \vspace{0.4cm}
+
+        \begin{block}{Impacto del Ruido}
+            \scriptsize
+            La variación del 5\% simula la incertidumbre instrumental sin comprometer la tendencia física del modelo.
+        \end{block}
+    \end{columns}
+
+\end{frame}

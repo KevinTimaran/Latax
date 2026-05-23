@@ -1,0 +1,67 @@
+%Luchando los dias 
+%============================================
+%  Explicar Los daots que se usaran para este promblema 
+%=============================================
+
+\begin{frame}{Generación de Datos Simulados}
+
+    \begin{columns}[c]
+
+        %========================================
+        % COLUMNA IZQUIERDA: Tabla de Sensores
+        %========================================
+        \column{0.50\textwidth}
+        \begin{block}{Ubicación de Sensores ($S_i$)}
+            \centering
+            \scriptsize 
+            \begin{tabular}{@{}lccc@{}}
+                \toprule
+                \textbf{Sensor} & \textbf{$x_i$} & \textbf{$y_i$} & \textbf{$z_i$} \\ \midrule
+                S1 & -4.0 & -3.0 & 0.2 \\
+                S2 & -2.5 & 2.8 & -0.1 \\
+                S3 & 0.0 & 4.0 & 0.1 \\
+                S4 & 3.5 & 3.0 & -0.2 \\
+                S5 & 4.5 & -1.5 & 0.0 \\
+                S6 & 2.0 & -4.0 & 0.3 \\
+                S7 & -1.0 & -4.5 & -0.1 \\
+                S8 & -4.5 & 1.0 & 0.2 \\
+                S9 & 0.5 & 0.5 & 0.0 \\
+                S10 & 2.8 & 0.8 & -0.3 \\
+                S11 & -1.8 & -1.2 & 0.1 \\
+                S12 & 1.0 & 3.2 & 0.2 \\ \bottomrule
+            \end{tabular}
+        \end{block}
+
+        %========================================
+        % COLUMNA DERECHA: Resumen Ejecutivo
+        %========================================
+        \column{0.45\textwidth}
+
+        \begin{block}{Configuración de Red}
+            \small
+            \begin{itemize}
+                \item \textbf{Muestra:} $n = 12$ sensores.
+                \item \textbf{Espacio:} Distribución tridimensional.
+            \end{itemize}
+        \end{block}
+
+        \vspace{0.4cm}
+
+        \begin{block}{Estrategia de Simulación}
+            \scriptsize
+            \begin{itemize}
+                \item Cobertura multidireccional.
+                \item Estabilidad del problema inverso.
+                \item Generación de amplitudes ideales.
+            \end{itemize}
+        \end{block}
+
+        \vspace{0.6cm}
+        
+        \begin{center}
+            \tiny \textcolor{gray}{Red optimizada para localización robusta de la fuente.}
+        \end{center}
+
+    \end{columns}
+
+\end{frame}

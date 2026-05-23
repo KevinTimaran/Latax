@@ -1,0 +1,50 @@
+\begin{frame}{Ejemplo Numérico del Procedimiento de Cálculo}
+
+    \begin{columns}[T]
+        %========================================
+        % COLUMNA IZQUIERDA: LOS PASOS LÓGICOS
+        %========================================
+        \column{0.46\textwidth}
+        \begin{block}{Mecánica de Evaluación}
+            \scriptsize
+            Para cada punto candidato $(x,y,z)$, el algoritmo ejecuta tres pasos secuenciales por cada sensor:
+            \begin{enumerate}
+                \item \textbf{Geometría:} Calcula la distancia euclidiana 3D al sensor.
+                \item \textbf{Física:} Evalúa la atenuación teórica ($A_{pred}$).
+                \item \textbf{Estadística:} Obtiene el residuo individual.
+            \end{enumerate}
+        \end{block}
+
+        \vspace{0.1cm}
+
+        \begin{block}{Acumulación del Costo}
+            \scriptsize
+            Este procedimiento matemático se repite de forma idéntica para los 12 sensores de la red. La sumatoria de estos residuos cuadrados es la que define el error global $E(x,y,z)$.
+        \end{block}
+
+        %========================================
+        % COLUMNA DERECHA: LA CORRIDA EN FRÍO REAL (S9)
+        %========================================
+        \column{0.50\textwidth}
+        \begin{exampleblock}{Traza de Ejecución Real (Sensor 9)}
+            \tiny
+            Evaluación en el punto estimado: $(1.2001, -0.7765, -1.1381)$ \\
+            Datos de $S_9$: Coordenadas $(0.5, 0.5, 0.0)$ y $Az_{obs} = 0.852201$
+            
+            \vspace{0.15cm}
+            \textbf{Paso 1: Distancia Euclidiana ($R_9$)}
+            \[ R_9 = \sqrt{(0.5 - 1.2001)^2 + (0.5 - (-0.7765))^2 + (0.0 - (-1.1381))^2} \]
+            \[ R_9 = \sqrt{(-0.7001)^2 + (1.2765)^2 + (1.1381)^2} \approx 1.8479 \]
+
+            \vspace{0.1cm}
+            \textbf{Paso 2: Amplitud Predicha ($A_{pred,9}$)}
+            \[ A_{pred,9} = 10 \cdot \frac{e^{-1.8479}}{1.8479} \approx 0.852651 \]
+
+            \vspace{0.1cm}
+            \textbf{Paso 3: Residuo Individual}
+            \[ \text{Residuo} = A_{obs,9} - A_{pred,9} \]
+            \[ \text{Residuo} = 0.852201 - 0.852651 = -0.000450 \]
+        \end{exampleblock}
+    \end{columns}
+
+\end{frame}

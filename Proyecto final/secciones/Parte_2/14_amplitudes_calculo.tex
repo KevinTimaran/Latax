@@ -1,0 +1,58 @@
+% Luchando los dias
+%============================================
+% 15. Explicar procedimiento de las amplitudes ideales
+%=============================================
+
+\begin{frame}{Cálculo de Amplitudes Ideales ($A_{ideal}$)}
+
+    \begin{columns}[T]
+        %========================================
+        % COLUMNA IZQUIERDA: Tabla de Datos Ri
+        %========================================
+        \column{0.48\textwidth}
+        \begin{block}{Entradas: Coordenadas y Distancia}
+            \centering
+            \scriptsize 
+            \begin{tabular}{@{}lcccc@{}}
+                \toprule
+                \textbf{Sens.} & \textbf{$x_i$} & \textbf{$y_i$} & \textbf{$z_i$} & \textbf{$R_i$} \\ \midrule
+                S1  & -4.0 & -3.0 &  0.2 & 5.7940 \\
+                S2  & -2.5 &  2.8 & -0.1 & 5.2583 \\
+                S3  &  0.0 &  4.0 &  0.1 & 5.0912 \\
+                S4  &  3.5 &  3.0 & -0.2 & 4.5321 \\
+                S5  &  4.5 & -1.5 &  0.0 & 3.5482 \\
+                S6  &  2.0 & -4.0 &  0.3 & 3.5833 \\
+                S7  & -1.0 & -4.5 & -0.1 & 4.4193 \\
+                S8  & -4.5 &  1.0 &  0.2 & 6.1172 \\
+                S9  &  0.5 &  0.5 &  0.0 & 1.8412 \\
+                S10 &  2.8 &  0.8 & -0.3 & 2.4000 \\
+                S11 & -1.8 & -1.2 &  0.1 & 3.2558 \\
+                S12 &  1.0 &  3.2 &  0.2 & 4.2107 \\ \bottomrule
+            \end{tabular}
+        \end{block}
+
+        %========================================
+        % COLUMNA DERECHA: Procedimiento Paso a Paso
+        %========================================
+        \column{0.48\textwidth}
+        \begin{exampleblock}{Procedimiento ($S_1$)}
+            \centering
+            \footnotesize
+            % Se redujo el salto de línea de 0.3cm a 0.1cm para ahorrar espacio vertical
+            \begin{align*}
+                A_{ideal,i} &= A_0 \frac{e^{-R_i}}{R_i} \\[0.1cm]
+                A_{ideal,1} &= 10 \frac{e^{-5.7940}}{5.7940} \\[0.1cm]
+                A_{ideal,1} &\approx 10 \frac{0.003045}{5.7940} \\[0.1cm]
+                \mathbf{A_{ideal,1}} &\approx \mathbf{0.005257}
+            \end{align*}
+        \end{exampleblock}
+
+        \vspace{0.1cm} % Reducido para acercar la nota al bloque superior
+
+        \begin{block}{Nota del Modelo}
+            \scriptsize
+            Cálculo determinista basado en el decaimiento exponencial y dispersión geométrica.
+        \end{block}
+    \end{columns}
+
+\end{frame}

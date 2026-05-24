@@ -1,3 +1,5 @@
+% Diapositiva 41
+
 % Kevin
 %=============================================
 % Puntos 9, 10: Importancia de la optimización
@@ -8,17 +10,16 @@
 
     \begin{columns}[T]
 
-        %===========================================
-        % COLUMNA IZQUIERDA: Optimización
-        %===========================================
         \column{0.48\textwidth}
 
         \begin{block}{¿Por qué fue importante optimizar?}
             \scriptsize
             \begin{itemize}
-                \item La optimización permitió identificar \textbf{automáticamente} la región del espacio donde el error era mínimo.
+                \item Gauss-Newton identificó \textbf{automáticamente} la región del espacio $\mathbb{R}^4$ donde el error era mínimo.
                 \vspace{0.15cm}
-                \item Sin ella, habría que evaluar manualmente infinitas combinaciones de $(x, y, z)$.
+                \item Sin ella, habría que evaluar manualmente infinitas combinaciones de $(x, y, z, A_0)$.
+                \vspace{0.15cm}
+                \item Convergió en solo \textbf{8 iteraciones} con precisión $> 99.7\%$.
                 \vspace{0.15cm}
                 \item Es el puente entre el \textbf{modelo matemático} y la \textbf{solución física}.
             \end{itemize}
@@ -29,12 +30,9 @@
         \begin{exampleblock}{Idea Clave}
             \centering
             \scriptsize
-            Buscar el mínimo de $E$ equivale a \textbf{encontrar la fuente sísmica}.
+            Buscar el mínimo de $E(x,y,z,A_0)$ equivale a \textbf{encontrar la fuente sísmica}.
         \end{exampleblock}
 
-        %===========================================
-        % COLUMNA DERECHA: Limitaciones
-        %===========================================
         \column{0.48\textwidth}
 
         \begin{block}{Limitaciones del Modelo}
@@ -42,7 +40,7 @@
             \begin{itemize}
                 \item \textbf{Medio homogéneo:} se asumió propagación uniforme, sin variaciones del terreno.
                 \vspace{0.1cm}
-                \item \textbf{Mínimos locales:} la optimización podría converger a un mínimo no global.
+                \item \textbf{Sensibilidad inicial:} Gauss-Newton requiere un punto de inicio razonable para converger al mínimo global.
                 \vspace{0.1cm}
                 \item \textbf{Sensibilidad al ruido:} el ruido en las mediciones afecta la precisión de la estimación.
                 \vspace{0.1cm}

@@ -1,56 +1,70 @@
+% Diapositiva 25
 % El mono jojoi
 %=============================================
-% 7. Explicar el método de optimización principal: Nelder-Mead
+% 7. Método de optimización principal: Gauss-Newton
 %=============================================
 
-
-\begin{frame}{Método de Optimización Principal: Nelder-Mead}
+\begin{frame}{Método de Optimización Principal: Gauss-Newton}
 
     \begin{columns}[T]
-        %========================================
-        % COLUMNA IZQUIERDA: LÓGICA Y ECUACIONES
-        %========================================
-        \column{0.48\textwidth} % Ligeramente más ancha para evitar saltos de línea
-        
-        \begin{block}{Dinámica Geométrica}
+
+        %===========================================
+        % COLUMNA IZQUIERDA: Fundamento matemático
+        %===========================================
+        \column{0.48\textwidth}
+
+        \begin{block}{Fundamento Matemático}
             \scriptsize
-            \begin{itemize}
-                \item \textbf{Mecanismo:} Despliega un simplex (poliedro de 4 vértices) en el espacio 3D.
-                \item \textbf{Adaptación:} Se refleja, expande o contrae buscando la pendiente de menor error.
-            \end{itemize}
+            El modelo de atenuación es \textbf{no lineal} respecto a las coordenadas. Gauss-Newton lo linealiza en cada iteración mediante una aproximación de Taylor de primer orden:
+            \[
+                A_z \approx A_z(m^k) + G \cdot \Delta m
+            \]
+            donde $G$ es la \textbf{matriz jacobiana} $M \times 4$.
         \end{block}
 
-        \begin{exampleblock}{Operaciones de Búsqueda}
+        \vspace{0.15cm}
+
+        \begin{exampleblock}{Ecuaciones del Método}
             \scriptsize
-            \begin{itemize}
-                \item \textbf{Reflexión:} Proyección al mejor ajuste: $x_r = x_c + \alpha(x_c - x_{\text{peor}})$
-                \item \textbf{Expansión:} Se acelera si el nuevo error es menor: $E(x_r) < E_{\text{mejor}}$.
-                \item \textbf{Contracción:} Se encoge si el error aumenta.
-            \end{itemize}
+            \textbf{Actualización óptima:}
+            \[
+                \Delta m = (G^T G)^{-1} G^T \Delta A_z
+            \]
+            \textbf{Iteración:}
+            \[
+                m^{(k+1)} = m^{(k)} + \Delta m
+            \]
+            \textbf{Criterio de parada:} $\| \Delta m \| < 10^{-6}$
         \end{exampleblock}
 
         \begin{block}{Robustez del Método}
             \scriptsize
-            Alta tolerancia para absorber las perturbaciones del ruido gaussiano (5\%).
+            Convergió en \textbf{8 iteraciones} con precisión $> 99.7\%$.
         \end{block}
 
-        %========================================
-        % COLUMNA DERECHA: IMAGEN CONCEPTUAL
-        %========================================
+        %===========================================
+        % COLUMNA DERECHA: Imagen de convergencia
+        %===========================================
         \column{0.48\textwidth}
-        \vspace{0.2cm}
-        \begin{center}
-            % Ajusta el nombre del archivo según cómo lo hayas guardado
-            \includegraphics[width=\textwidth]{Imagenes/NelderMeadVisual.png}
-        \end{center}
-        
-        \vspace{-0.3cm}
+
+        \begin{block}{Convergencia del Algoritmo}
+            \centering
+            \includegraphics[width=0.95\textwidth]{Imagenes/GaussNewtonConvergencia.png}
+        \end{block}
+
+        \vspace{0.1cm}
         \begin{center}
             \tiny \textcolor{gray}{
-            Representación conceptual del simplex iterando sobre la topografía del error.
+                Error $E$ y norma $\|\Delta m\|$ decreciendo hasta la tolerancia $10^{-6}$.
             }
         \end{center}
 
     \end{columns}
+
+    \vspace{0.1cm}
+    \begin{center}
+        \footnotesize
+        \textbf{El jacobiano conecta directamente el cálculo multivariado con la solución física.}
+    \end{center}
 
 \end{frame}

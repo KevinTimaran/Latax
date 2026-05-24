@@ -1,3 +1,4 @@
+% Diapositiva 39
 % Luis
 %=============================================
 % Puntos 1-4: Resultado final, cercanía fuente estimada/real,
@@ -10,42 +11,36 @@
 
     \begin{columns}[T]
 
-        %===========================================
-        % COLUMNA IZQUIERDA: Comparación numérica
-        %===========================================
         \column{0.50\textwidth}
 
-        \begin{block}{Fuente Real vs. Estimada}
+        \begin{block}{Fuente Real vs. Estimada — Gauss-Newton}
             \centering
             \scriptsize
-            \begin{tabular}{@{}lccc@{}}
+            \begin{tabular}{@{}lcccc@{}}
                 \toprule
-                & $x$ & $y$ & $z$ \\ \midrule
-                \textbf{Real}      & $1.200$ & $-0.800$ & $-1.100$ \\[0.15cm]
-                \textbf{Estimada}  & $1.200$ & $-0.777$ & $-1.138$ \\[0.15cm] \midrule
-                \textbf{Error} $|\Delta|$ & $0.000$ & $0.023$ & $0.038$ \\
+                & $x$ & $y$ & $z$ & $A_0$ \\ \midrule
+                \textbf{Real}     & $1.2000$ & $-0.8000$ & $-1.1000$ & $10.0000$ \\[0.15cm]
+                \textbf{Estimada} & $1.1995$ & $-0.8012$ & $-1.1024$ & $10.0142$ \\[0.15cm] \midrule
+                \textbf{Error} $|\Delta|$ & $0.0005$ & $0.0012$ & $0.0024$ & $0.0142$ \\
                 \bottomrule
             \end{tabular}
             \vspace{0.15cm}
-            \tiny \textcolor{gray}{Coordenadas en kilómetros (km).}
+            \tiny \textcolor{gray}{Coordenadas en km. $\|\Delta m\| \approx 0.0027$ km — precisión $> 99.7\%$}
         \end{block}
 
         \vspace{0.2cm}
 
         \begin{exampleblock}{Resultado del Proyecto}
             \scriptsize
-            El proyecto estimó correctamente la ubicación de la fuente sísmica a partir de las amplitudes registradas por sensores distribuidos en el espacio.
+            Gauss-Newton estimó correctamente las \textbf{4 incógnitas} del problema inverso a partir de las amplitudes registradas por los 12 sensores, con una precisión superior al 99.7\%.
         \end{exampleblock}
 
-        %===========================================
-        % COLUMNA DERECHA: Interpretación
-        %===========================================
         \column{0.46\textwidth}
 
         \begin{block}{Cercanía e Interpretación Física}
             \scriptsize
             \begin{itemize}
-                \item La fuente estimada quedó \textbf{muy cerca} de la fuente real, validando el modelo.
+                \item La fuente estimada quedó a solo \textbf{0.0027 km} de la fuente real, validando el modelo.
                 \vspace{0.1cm}
                 \item La amplitud \textbf{disminuye con la distancia} por atenuación y dispersión de la energía.
                 \vspace{0.1cm}
@@ -58,7 +53,7 @@
         \begin{block}{Coherencia del Modelo}
             \centering
             \scriptsize
-            El comportamiento físico y matemático obtenido es \textbf{consistente} con lo esperado.
+            El comportamiento físico y matemático obtenido es \textbf{consistente} con lo esperado. Gauss-Newton recuperó $A_0$ con error de solo $0.142\%$.
         \end{block}
 
     \end{columns}
@@ -66,7 +61,7 @@
     \vspace{0.15cm}
     \begin{center}
         \footnotesize
-        \textbf{El modelo reprodujo adecuadamente las mediciones observadas.}
+        \textbf{El modelo reprodujo adecuadamente las mediciones observadas con precisión $> 99.7\%$.}
     \end{center}
 
 \end{frame}

@@ -1,47 +1,54 @@
+% Diapositiva 29
+
 \begin{frame}{Resultados de la Estimación y Comparación}
 
     \begin{columns}[T]
-        %========================================
-        % COLUMNA IZQUIERDA: MÉTRICAS Y GRÁFICA
-        %========================================
+
         \column{0.48\textwidth}
+
+        \vspace{-0.6cm}
+
         \begin{block}{Convergencia Numérica}
             \scriptsize
-            El algoritmo Nelder-Mead convergió a un residuo óptimo:
-            \[ E_{min} \approx 2.8592 \times 10^{-5} \]
+            El algoritmo Gauss-Newton convergió en \textbf{8 iteraciones} a un residuo óptimo:
+            \[ E_{\min} \approx 8.50 \times 10^{-6} \]
+            \textbf{Precisión:} $> 99.7\%$ \quad $\|\Delta m\| \approx 0.0027$ km
         \end{block}
 
-        \vspace{0.1cm}
-        
-        \begin{center}
-            \includegraphics[width=0.9\textwidth]{Imagenes/EstimacionValidacion.png}
-            \\ \tiny \textcolor{gray}{Comparativa visual: Fuente Real vs Estimada.}
-        \end{center}
+        \begin{block}{Comparativa Visual}
+            \vspace{-0.15cm}
+            \centering
+            \includegraphics[width=0.60\textwidth]{Imagenes/EstimacionValidacion.png}
+            \\ \tiny \textcolor{gray}{Fuente Real vs Estimada — Gauss-Newton.}
+            \vspace{-0.1cm}
+        \end{block}
 
-        %========================================
-        % COLUMNA DERECHA: TABLA COMPARATIVA
-        %========================================
         \column{0.48\textwidth}
+
+        \vspace{-0.5cm}
+
         \begin{block}{Comparación Definitiva}
             \centering
             \scriptsize
             \begin{tabular}{@{}lccc@{}}
                 \toprule
                 \textbf{Par.} & \textbf{Real} & \textbf{Est.} & \textbf{Dif.} \\ \midrule
-                $x$ & 1.2000 & 1.2001 & 0.0001 \\
-                $y$ & -0.8000 & -0.7765 & 0.0235 \\
-                $z$ & -1.1000 & -1.1381 & 0.0381 \\ \bottomrule
+                $x_{\text{real}}$ [km] & 1.2000  & 1.1995  & 0.0005 \\[0.1cm]
+                $y_{\text{real}}$ [km] & -0.8000 & -0.8012 & 0.0012 \\[0.1cm]
+                $z_{\text{real}}$ [km] & -1.1000 & -1.1024 & 0.0024 \\[0.1cm]
+                $A_0$                  & 10.0000 & 10.0142 & 0.0142 \\ \bottomrule
             \end{tabular}
-            
-            \vspace{0.2cm}
-            \textbf{Distancia neta:} \\
-            $\Delta \approx 0.0448$ unidades
+
+            \vspace{0.15cm}
+            \textbf{Distancia posicional neta:}
+            \[ \|\Delta m\| \approx 0.0027 \text{ km} \]
         \end{block}
 
         \begin{block}{Interpretación Física}
             \scriptsize
-            Las desviaciones en $y$ y $z$ son consistentes con la perturbación gaussiana del 5\% aplicada al modelo.
+            Las pequeñas desviaciones son consistentes con el ruido gaussiano del 5\%. Gauss-Newton recuperó $A_0$ con error de solo $0.142\%$.
         \end{block}
+
     \end{columns}
 
 \end{frame}

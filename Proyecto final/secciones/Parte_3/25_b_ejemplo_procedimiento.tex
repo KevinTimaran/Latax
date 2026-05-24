@@ -1,16 +1,21 @@
+% Diapositiva 27
+% Le mono jojoi
+%=============================================
+% 8.2. Ejemplo numérico con valores Gauss-Newton
+%=============================================
+
 \begin{frame}{Ejemplo Numérico del Procedimiento de Cálculo}
 
     \begin{columns}[T]
-        %========================================
-        % COLUMNA IZQUIERDA: LOS PASOS LÓGICOS
-        %========================================
+
         \column{0.46\textwidth}
+
         \begin{block}{Mecánica de Evaluación}
             \scriptsize
-            Para cada punto candidato $(x,y,z)$, el algoritmo ejecuta tres pasos secuenciales por cada sensor:
+            Para cada iteración $k$, el algoritmo evalúa tres pasos por cada sensor:
             \begin{enumerate}
                 \item \textbf{Geometría:} Calcula la distancia euclidiana 3D al sensor.
-                \item \textbf{Física:} Evalúa la atenuación teórica ($A_{pred}$).
+                \item \textbf{Física:} Evalúa la atenuación teórica ($A_{pred}$) con $A_0^*$ estimado.
                 \item \textbf{Estadística:} Obtiene el residuo individual.
             \end{enumerate}
         \end{block}
@@ -19,32 +24,50 @@
 
         \begin{block}{Acumulación del Costo}
             \scriptsize
-            Este procedimiento matemático se repite de forma idéntica para los 12 sensores de la red. La sumatoria de estos residuos cuadrados es la que define el error global $E(x,y,z)$.
+            Este procedimiento se repite para los 12 sensores. La sumatoria de residuos cuadrados define el error global $E(m)$, que Gauss-Newton minimiza iterativamente.
         \end{block}
 
-        %========================================
-        % COLUMNA DERECHA: LA CORRIDA EN FRÍO REAL (S9)
-        %========================================
+        \vspace{-0.10cm}
+
+        \begin{exampleblock}{Solución Óptima}
+            \centering
+            \scriptsize
+            $m^* = (1.1995,\ {-0.8012},\ {-1.1024})$ km \\
+            $A_0^* = 10.0142$
+        \end{exampleblock}
+
         \column{0.50\textwidth}
+
         \begin{exampleblock}{Traza de Ejecución Real (Sensor 9)}
             \tiny
-            Evaluación en el punto estimado: $(1.2001, -0.7765, -1.1381)$ \\
-            Datos de $S_9$: Coordenadas $(0.5, 0.5, 0.0)$ y $Az_{obs} = 0.852201$
-            
+            Evaluación en $m^* = (1.1995,\ {-0.8012},\ {-1.1024})$ \\
+            Datos de $S_9$: $(0.5,\ 0.5,\ 0.0)$,\quad $Az_{obs} = 0.852201$
+
             \vspace{0.15cm}
             \textbf{Paso 1: Distancia Euclidiana ($R_9$)}
-            \[ R_9 = \sqrt{(0.5 - 1.2001)^2 + (0.5 - (-0.7765))^2 + (0.0 - (-1.1381))^2} \]
-            \[ R_9 = \sqrt{(-0.7001)^2 + (1.2765)^2 + (1.1381)^2} \approx 1.8479 \]
+            \[
+                R_9 = \sqrt{(0.5-1.1995)^2 + (0.5-(-0.8012))^2 + (0.0-(-1.1024))^2}
+            \]
+            \[
+                R_9 = \sqrt{(-0.6995)^2 + (1.3012)^2 + (1.1024)^2} \approx 1.8433
+            \]
 
             \vspace{0.1cm}
             \textbf{Paso 2: Amplitud Predicha ($A_{pred,9}$)}
-            \[ A_{pred,9} = 10 \cdot \frac{e^{-1.8479}}{1.8479} \approx 0.852651 \]
+            \[
+                A_{pred,9} = 10.0142 \cdot \frac{e^{-1.8433}}{1.8433} \approx 0.859991
+            \]
 
             \vspace{0.1cm}
             \textbf{Paso 3: Residuo Individual}
-            \[ \text{Residuo} = A_{obs,9} - A_{pred,9} \]
-            \[ \text{Residuo} = 0.852201 - 0.852651 = -0.000450 \]
+            \[
+                \text{Residuo} = A_{obs,9} - A_{pred,9}
+            \]
+            \[
+                \text{Residuo} = 0.852201 - 0.859991 = -0.007790
+            \]
         \end{exampleblock}
+
     \end{columns}
 
 \end{frame}

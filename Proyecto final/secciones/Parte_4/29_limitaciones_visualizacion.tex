@@ -1,42 +1,37 @@
+% Diapositiva 31
 % Alejandro
 %=============================================
-% Puntos 1, 2, 3: Por qué E(x,y,z) no se puede visualizar completa,
+% Puntos 1, 2, 3: Por qué E(x,y,z,A0) no se puede visualizar completa,
 % qué significa fijar z, y cortes bidimensionales.
 %=============================================
 
 \section{Visualización y Mapas de Calor}
 
-\begin{frame}{Visualización de $E(x,y,z)$: El Problema Dimensional}
+\begin{frame}{Visualización de $E(x,y,z,A_0)$: El Problema Dimensional}
 
     \begin{columns}[T]
 
-        %===========================================
-        % COLUMNA IZQUIERDA
-        %===========================================
         \column{0.48\textwidth}
 
         \begin{block}{¿Por qué no se puede graficar directamente?}
             \scriptsize
-            La función de error depende \textbf{simultáneamente} de tres variables espaciales:
+            La función de error depende \textbf{simultáneamente} de cuatro parámetros:
             \[
-                E = E(x, y, z)
+                E = E(x,\, y,\, z,\, A_0)
             \]
             \begin{itemize}
                 \item Una gráfica convencional solo admite \textbf{dos dimensiones}.
-                \item Representar $E$ completa requeriría un espacio \textbf{4D}.
+                \item Representar $E$ completa requeriría un espacio \textbf{5D}.
                 \item Por tanto, la visualización directa \textbf{no es posible}.
             \end{itemize}
             \vspace{0.15cm}
-            \textbf{Estrategia:} Se fija un valor constante de $z$ y se analiza:
+            \textbf{Estrategia:} Se fijan $z$ y $A_0$ en sus valores óptimos y se analiza:
             \[
-                E(x, y)\Big|_{z = z_{\text{real}}}
+                E(x, y)\Big|_{z = z_{\text{real}},\; A_0 = A_0^*}
             \]
             Esto reduce el problema a \textbf{dos variables} visualizables.
         \end{block}
 
-        %===========================================
-        % COLUMNA DERECHA
-        %===========================================
         \column{0.48\textwidth}
 
         \begin{block}{¿Qué representa cada corte?}
@@ -55,7 +50,7 @@
         \begin{block}{Idea Central}
             \centering
             \scriptsize
-            Fijar $z$ convierte un problema \textbf{4D} en uno \textbf{2D} visualizable.
+            Fijar $z$ y $A_0$ convierte un problema \textbf{5D} en uno \textbf{2D} visualizable.
         \end{block}
 
     \end{columns}
@@ -63,7 +58,7 @@
     \vspace{0.2cm}
     \begin{center}
         \footnotesize
-        \textbf{Los cortes bidimensionales son la herramienta clave para explorar $E(x,y,z)$.}
+        \textbf{Los cortes bidimensionales son la herramienta clave para explorar $E(x,y,z,A_0)$.}
     \end{center}
 
 \end{frame}

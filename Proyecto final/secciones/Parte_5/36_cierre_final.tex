@@ -1,3 +1,6 @@
+% Diapositiva  42
+
+
 % Kevin
 %=============================================
 % Puntos 11, 12, 13: Mejoras futuras,
@@ -8,9 +11,6 @@
 
     \begin{columns}[T]
 
-        %===========================================
-        % COLUMNA IZQUIERDA: Mejoras futuras
-        %===========================================
         \column{0.48\textwidth}
 
         \begin{block}{Mejoras Futuras}
@@ -20,24 +20,25 @@
                 \vspace{0.1cm}
                 \item Considerar \textbf{medios no homogéneos} (terreno realista).
                 \vspace{0.1cm}
-                \item Aumentar la \textbf{cantidad de sensores} para mayor resolución.
+                \item Aumentar la \textbf{cantidad de sensores} para mayor resolución espacial.
                 \vspace{0.1cm}
-                \item Aplicar \textbf{técnicas de optimización más avanzadas}.
+                \item Extender la estimación a \textbf{parámetros adicionales} del modelo sísmico.
             \end{itemize}
         \end{block}
 
-        %===========================================
-        % COLUMNA DERECHA: Conclusión del problema inverso
-        %===========================================
         \column{0.48\textwidth}
 
         \begin{exampleblock}{El Problema Inverso se Resolvió}
             \scriptsize
             El problema inverso pudo resolverse correctamente utilizando:
             \begin{itemize}
-                \item \textbf{Funciones multivariables}
-                \item \textbf{Optimización numérica}
+                \item \textbf{Funciones multivariables} $E(x,y,z,A_0)$
+                \vspace{0.05cm}
+                \item \textbf{Gauss-Newton} — 8 iteraciones, precisión $>99.7\%$
+                \vspace{0.05cm}
                 \item \textbf{Análisis visual} de la función de error
+                \vspace{0.05cm}
+                \item \textbf{Estimación simultánea} de las 4 incógnitas
             \end{itemize}
         \end{exampleblock}
 
@@ -45,9 +46,6 @@
 
     \vspace{0.3cm}
 
-    %===========================================
-    % CIERRE FORMAL — ancho completo
-    %===========================================
     \begin{block}{}
         \centering
         \normalsize

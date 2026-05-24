@@ -1,3 +1,5 @@
+% Diapositiva 38
+
 % David
 %=============================================
 % Puntos 12-17: Trayectoria del mínimo, interpretación geométrica,
@@ -9,9 +11,6 @@
 
     \begin{columns}[T]
 
-        %===========================================
-        % COLUMNA IZQUIERDA: Trayectoria del mínimo
-        %===========================================
         \column{0.52\textwidth}
 
         \begin{block}{Trayectoria del mínimo en el plano $(x,y)$}
@@ -21,20 +20,17 @@
 
         \vspace{0.1cm}
         \begin{center}
-            \tiny \textcolor{gray}{Evolución de la posición del mínimo al variar la profundidad $z$.}
+            \tiny \textcolor{gray}{Evolución de la posición del mínimo al variar $z$. Datos: Tabla 4 de Gauss-Newton.}
         \end{center}
 
-        %===========================================
-        % COLUMNA DERECHA: Interpretación y conclusión
-        %===========================================
         \column{0.44\textwidth}
 
         \begin{block}{Interpretación Geométrica}
             \scriptsize
             \begin{itemize}
-                \item La trayectoria muestra \textbf{cómo se desplaza} la ubicación estimada de la fuente al modificar $z$.
+                \item La trayectoria muestra \textbf{cómo se desplaza} $(x^*, y^*)$ al variar $z$: desde $(0.94, -0.43)$ en $z=-2.0$ km hasta $(1.42, -0.76)$ en $z=0.0$ km.
                 \vspace{0.1cm}
-                \item Las visualizaciones revelan la \textbf{forma de la superficie de error} y cómo el algoritmo converge hacia el mínimo.
+                \item La variación es \textbf{suave y continua}, confirmando estabilidad de la solución.
                 \vspace{0.1cm}
                 \item La región mínima es la zona donde $A_{pred,i} \approx A_{obs,i}$ de manera más consistente.
             \end{itemize}
@@ -45,9 +41,9 @@
         \begin{exampleblock}{Relación con la Fuente Real}
             \scriptsize
             \begin{itemize}
-                \item Las regiones de \textbf{menor error coinciden} con la ubicación real de la fuente simulada.
+                \item En $z = -1.10$ km la trayectoria pasa por $(1.21, -0.79)$ km — \textbf{muy cerca de la fuente real} $(1.2, -0.8)$ km.
                 \vspace{0.1cm}
-                \item La visualización \textbf{confirma gráficamente} lo encontrado por el optimizador numérico.
+                \item La visualización \textbf{confirma gráficamente} lo encontrado por Gauss-Newton.
             \end{itemize}
         \end{exampleblock}
 
@@ -56,7 +52,7 @@
     \vspace{0.15cm}
     \begin{center}
         \footnotesize
-        \textbf{La visualización permite comprender intuitivamente cómo la optimización localiza la fuente sísmica.}
+        \textbf{La visualización permite comprender intuitivamente cómo Gauss-Newton localiza la fuente sísmica.}
     \end{center}
 
 \end{frame}

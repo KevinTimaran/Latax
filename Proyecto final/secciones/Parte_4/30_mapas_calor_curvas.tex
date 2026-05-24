@@ -1,3 +1,5 @@
+% Diapositiva 33, 34, 35, 36
+
 % Alejandro
 %=============================================
 % Puntos 4-10: Mapas de calor, curvas de nivel,
@@ -35,7 +37,7 @@
 
         \begin{exampleblock}{¿Qué nos dice?}
             \scriptsize
-            A esta profundidad el modelo \textbf{no logra reproducir} las amplitudes observadas, lo que confirma que la fuente no está aquí.
+            A esta profundidad el modelo \textbf{no logra reproducir} las amplitudes observadas, confirmando que la fuente no está aquí.
         \end{exampleblock}
 
     \end{columns}
@@ -95,13 +97,13 @@
 % -----------------------------------------------
 % FRAME 30c: z = -1.14
 % -----------------------------------------------
-\begin{frame}{Mapa de Calor: Corte en $z = -1.14$ km — Profundidad Estimada}
+\begin{frame}{Mapa de Calor: Corte en $z = -1.14$ km — Corte Intermedio}
 
     \begin{columns}[T]
 
         \column{0.55\textwidth}
 
-        \begin{block}{Corte en $z_{\text{est}} = -1.14$ km}
+        \begin{block}{Corte en $z = -1.14$ km}
             \centering
             \includegraphics[width=0.95\textwidth]{Imagenes/corte_z_114.png}
         \end{block}
@@ -111,11 +113,11 @@
         \begin{block}{Interpretación}
             \scriptsize
             \begin{itemize}
-                \item Corresponde a la \textbf{profundidad estimada} por el optimizador numérico.
+                \item Corte \textbf{intermedio} entre $z_{\text{real}} = -1.10$ km y $z_{opt} = -1.22$ km.
                 \vspace{0.1cm}
-                \item La región mínima sigue \textbf{bien definida} y muy cercana a la fuente real.
+                \item La región mínima sigue \textbf{bien definida} y cercana a la fuente real.
                 \vspace{0.1cm}
-                \item La diferencia con $z_{\text{real}} = -1.10$ km es mínima, indicando \textbf{estabilidad} del modelo.
+                \item Confirma la \textbf{estabilidad} del modelo ante pequeñas variaciones de $z$.
             \end{itemize}
         \end{block}
 
@@ -123,7 +125,7 @@
 
         \begin{exampleblock}{¿Qué nos dice?}
             \scriptsize
-            El optimizador encontró una profundidad \textbf{muy cercana a la real}, confirmando la coherencia entre estimación numérica y visualización.
+            La región de bajo error se mantiene cerca de $(x_{\text{real}}, y_{\text{real}})$, confirmando la robustez de la solución de Gauss-Newton.
         \end{exampleblock}
 
     \end{columns}
@@ -155,7 +157,7 @@
         \begin{block}{Interpretación}
             \scriptsize
             \begin{itemize}
-                \item Este plano está \textbf{por debajo} de $z_{\text{real}}$ y $z_{\text{est}}$.
+                \item Este plano está \textbf{por debajo} de $z_{\text{real}}$ y $z_{opt}$.
                 \vspace{0.1cm}
                 \item La región mínima se \textbf{aleja y dispersa} respecto a los cortes anteriores.
                 \vspace{0.1cm}

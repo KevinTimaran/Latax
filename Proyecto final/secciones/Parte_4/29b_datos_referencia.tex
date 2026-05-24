@@ -1,7 +1,4 @@
-% Alejandro
-%=============================================
-% Tabla de parámetros clave del proyecto
-%=============================================
+% Diapositiva 32
 
 \begin{frame}{Parámetros del Modelo: Datos de Referencia}
 
@@ -9,57 +6,80 @@
 
         \column{0.50\textwidth}
 
+        \vspace{-0.3cm}
+
         \begin{block}{Parámetros de la Simulación}
             \centering
             \scriptsize
-            \begin{tabular}{@{}lp{3.2cm}@{}}
+            \begin{tabular}{@{}lp{2.8cm}@{}}
                 \toprule
-                \textbf{Elemento} & \textbf{Valor [km]} \\ \midrule
-                Fuente real $(x_{\text{real}},\ y_{\text{real}},\ z_{\text{real}})$ & $(1.2,\ {-0.8},\ {-1.1})$ \\[0.2cm]
-                Fuente estimada & $(1.200,\ {-0.777},\ {-1.138})$ \\[0.2cm]
-                Amplitud inicial $A_0$ & $10$ \\[0.2cm]
-                Número de sensores & $12$ \\[0.2cm]
-                Función evaluada & $E = \sum_{i=1}^{n}(A_{obs,i} - A_{pred,i})^2$ \\
+                \textbf{Elemento} & \textbf{Valor} \\ \midrule
+                Fuente real & $(1.2,\ {-0.8},\ {-1.1})$ km \\[0.1cm]
+                Fuente estimada & $(1.1995,\ {-0.8012},\ {-1.1024})$ km \\[0.1cm]
+                $A_0$ real & $10.0$ \\[0.1cm]
+                $A_0^*$ estimado & $10.0142$ \\[0.1cm]
+                Sensores & $12$ \\[0.1cm]
+                Función & $E = \sum_{i=1}^{n}(A_{obs,i} - A_{pred,i})^2$ \\
                 \bottomrule
             \end{tabular}
         \end{block}
 
-        \column{0.46\textwidth}
+        \vspace{0.08cm}
 
-        \begin{block}{Rangos de Búsqueda en la Grilla}
+        \begin{exampleblock}{Cortes de Profundidad Analizados}
             \centering
             \scriptsize
-            \begin{tabular}{@{}lcc@{}}
+            \begin{tabular}{@{}lp{2.8cm}@{}}
                 \toprule
-                \textbf{Var.} & \textbf{Rango [km]} & \textbf{Justificación} \\ \midrule
-                $x$ & $[-5,\ 5]$ & Cubre la red de sensores \\[0.2cm]
-                $y$ & $[-5,\ 5]$ & Cubre la red de sensores \\[0.2cm]
-                $z$ & $[-3,\ 1]$ & Incluye prof. sísmicas \\
-                \bottomrule
-            \end{tabular}
-        \end{block}
-
-        \vspace{0.2cm}
-
-        \begin{exampleblock}{Cortes de Profundidad Analizados [km]}
-            \centering
-            \scriptsize
-            \begin{tabular}{@{}lp{3.5cm}@{}}
-                \toprule
-                \textbf{Corte [km]} & \textbf{Significado} \\ \midrule
-                $z = -0.50$ & Plano menos profundo que la fuente \\[0.1cm]
-                $z = -1.10$ & Profundidad real de la fuente \\[0.1cm]
-                $z = -1.14$ & Profundidad estimada por optimización \\[0.1cm]
-                $z = -1.70$ & Plano más profundo, análisis comparativo \\
+                \textbf{Corte} & \textbf{Significado} \\ \midrule
+                $z = -0.50$ km & Plano superficial \\[0.05cm]
+                $z = -1.10$ km & Profundidad real \\[0.05cm]
+                $z = -1.14$ km & Corte intermedio \\[0.05cm]
+                $z = -1.70$ km & Plano profundo \\
                 \bottomrule
             \end{tabular}
         \end{exampleblock}
 
+        \column{0.46\textwidth}
+
+        \vspace{-0.3cm}
+
+        \begin{block}{Dominio de Búsqueda — Gauss-Newton}
+            \centering
+            \scriptsize
+            \begin{tabular}{@{}lcc@{}}
+                \toprule
+                \textbf{Var.} & \textbf{Rango} & \textbf{Just.} \\ \midrule
+                $x$ & $[-5,\ 5]$ km & Red \\[0.1cm]
+                $y$ & $[-5,\ 5]$ km & Red \\[0.1cm]
+                $z$ & $[-3,\ 1]$ km & Sísmico \\[0.1cm]
+                $A_0$ & $[0,\ 50]$ & Positiva \\
+                \bottomrule
+            \end{tabular}
+        \end{block}
+
+        \vspace{0.08cm}
+
+        \begin{block}{Resultados Gauss-Newton}
+            \centering
+            \scriptsize
+            \begin{tabular}{@{}lc@{}}
+                \toprule
+                \textbf{Métrica} & \textbf{Valor} \\ \midrule
+                Iteraciones & $8$ \\[0.08cm]
+                $E_{\min}$ & $8.50 \times 10^{-6}$ \\[0.08cm]
+                $\|\Delta m\|$ & $0.0027$ km \\[0.08cm]
+                Precisión & $> 99.7\%$ \\[0.08cm]
+                $z_{opt}$ & $-1.22$ km \\
+                \bottomrule
+            \end{tabular}
+        \end{block}
+
     \end{columns}
 
-    \vspace{0.1cm}
+    \vspace{0.05cm}
     \begin{center}
-        \tiny \textcolor{gray}{*Todas las coordenadas están expresadas en kilómetros (km).}
+        \tiny \textcolor{gray}{*Coordenadas en km. $z_{opt} \approx -1.22$ km, $E_{\min} \approx 8.50 \times 10^{-6}$.}
     \end{center}
 
 \end{frame}

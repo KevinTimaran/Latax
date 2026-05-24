@@ -1,44 +1,47 @@
+% Diapositiva 26
+
 % Le mono jojoi
 %=============================================
-% 8.1. Explicar que también se utilizó búsqueda por grilla como apoyo visual
+% 8.1. Búsqueda por grilla como apoyo visual y conceptual
 %=============================================
 
-\begin{frame}{Algoritmo Numérico: Búsqueda por Grilla}
+\begin{frame}{Algoritmo de Soporte: Búsqueda por Grilla}
 
     \begin{columns}[T]
-        
+
         %=======================================================
-        % COLUMNA IZQUIERDA: BLOQUE VERDE (Pseudocódigo)
+        % COLUMNA IZQUIERDA: Pseudocódigo
         %=======================================================
         \column{0.63\textwidth}
+
         \begin{exampleblock}{Lógica del Algoritmo de Exploración}
-            \scriptsize % Letra pequeña para que las fórmulas largas quepan sin problema
+            \scriptsize
             \textbf{Inicialización:} $E_{\text{min}} \leftarrow \infty$ \\[0.15cm]
             \begin{tabbing}
                 \quad \= \quad \= \quad \= \quad \= \kill
                 $\mathbf{para}$ cada $x$ dentro del rango sugerido $\mathbf{hacer}$ \\
                 \> $\mathbf{para}$ cada $y$ dentro del rango sugerido $\mathbf{hacer}$ \\
                 \> \> $\mathbf{para}$ cada $z$ dentro del rango sugerido $\mathbf{hacer}$ \\[0.1cm]
-                \> \> \> 1. $R_i = \sqrt{(x_i - x)^2 + (y_i - y)^2 + (z_i - z)^2}$ \\
-                \> \> \> 2. $A_{pred,i} = A_0 \frac{e^{-R_i}}{R_i}$ \\
+                \> \> \> 1. $R_i = \sqrt{(x_i - x_{\text{real}})^2 + (y_i - y_{\text{real}})^2 + (z_i - z_{\text{real}})^2}$ \\
+                \> \> \> 2. $A_{pred,i} = A_0 \dfrac{e^{-R_i}}{R_i}$ \\
                 \> \> \> 3. $E(x,y,z) = \sum_{i=1}^{n} (A_{obs,i} - A_{pred,i})^2$ \\[0.1cm]
                 \> \> \> $\mathbf{si}$ $E(x,y,z) < E_{\text{min}}$ $\mathbf{entonces}$ \\
                 \> \> \> \> $E_{\text{min}} \leftarrow E(x,y,z)$ \\
-                \> \> \> \> $\text{mejor\_punto} \leftarrow (x,y,z)$
+                \> \> \> \> $\text{mejor\_punto} \leftarrow (x_{\text{real}}, y_{\text{real}}, z_{\text{real}})$
             \end{tabbing}
         \end{exampleblock}
 
         %=======================================================
-        % COLUMNA DERECHA: BLOQUES AZULES APILADOS
+        % COLUMNA DERECHA: Bloques explicativos
         %=======================================================
         \column{0.34\textwidth}
-        
-        \begin{block}{Procesamiento Espacial}
+
+        \begin{block}{Rol en el Proyecto}
             \scriptsize
             \begin{itemize}
-                \item \textbf{Discretización:} Evaluación en mallas tridimensionales.
+                \item \textbf{Soporte visual:} No es el optimizador final.
                 \vspace{0.1cm}
-                \item \textbf{Métrica:} Validación simultánea en la red de sensores.
+                \item \textbf{Complemento:} Valida los resultados de Gauss-Newton.
             \end{itemize}
         \end{block}
 
@@ -47,18 +50,18 @@
         \begin{block}{Soporte Conceptual}
             \scriptsize
             \begin{itemize}
-                \item \textbf{Topografía:} Mapea la superficie de error.
+                \item \textbf{Topografía:} Mapea la superficie de error $E(x,y,z)$.
                 \vspace{0.1cm}
-                \item \textbf{Garantía:} Valida visualmente la existencia del mínimo global.
+                \item \textbf{Garantía:} Valida visualmente la existencia del mínimo global encontrado por Gauss-Newton.
             \end{itemize}
         \end{block}
 
     \end{columns}
 
-    \vspace{0.3cm}
+    \vspace{0.2cm}
     \begin{center}
         \footnotesize
-        \textbf{La estructura iterativa asegura un rastreo exhaustivo del hipocentro.}
+        \textbf{La grilla explora el espacio; Gauss-Newton converge al mínimo exacto.}
     \end{center}
 
 \end{frame}

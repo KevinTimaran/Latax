@@ -1,52 +1,74 @@
+% Diapositiva 24
+% El mono jojoi
+%=============================================
+% 7. Estrategia de búsqueda y optimización: Gauss-Newton
+%=============================================
+
 \begin{frame}{Estrategia de Búsqueda y Optimización}
 
     \begin{columns}[T]
-        %========================================
-        % COLUMNA IZQUIERDA: Algoritmos
-        %========================================
+
         \column{0.45\textwidth}
-        
-        \begin{block}{1. Nelder-Mead (Principal)}
+
+        \begin{block}{Método Principal: Gauss-Newton}
             \scriptsize
             \begin{itemize}
-                \item Algoritmo numérico iterativo.
-                \item Busca el mínimo de la función de error sin usar derivadas.
+                \item Algoritmo iterativo de \textbf{mínimos cuadrados no lineales}.
+                \vspace{0.1cm}
+                \item Linealiza el modelo en cada iteración mediante el \textbf{jacobiano G}.
+                \vspace{0.1cm}
+                \item Estima simultáneamente las \textbf{4 incógnitas}: $x_{\text{real}},\ y_{\text{real}},\ z_{\text{real}},\ A_0$.
+                \vspace{0.1cm}
+                \item Convergió en \textbf{8 iteraciones} con tolerancia $10^{-6}$.
             \end{itemize}
         \end{block}
 
-        \vspace{0.3cm}
+        \vspace{0.2cm}
 
-        \begin{block}{2. Búsqueda por Grilla (Soporte)}
+        \begin{exampleblock}{Esquema Iterativo}
+            \centering
             \scriptsize
-            \begin{itemize}
-                \item Exploración espacial estructurada.
-                \item Útil para visualización conceptual, no como optimizador final.
-            \end{itemize}
-        \end{block}
+            \[
+                \Delta m = (G^T G)^{-1} G^T \Delta A_z
+            \]
+            \[
+                m^{(k+1)} = m^{(k)} + \Delta m
+            \]
+        \end{exampleblock}
 
-        %========================================
-        % COLUMNA DERECHA: Rangos
-        %========================================
         \column{0.50\textwidth}
-        
-        \begin{block}{Acotación del Dominio ($x, y, z$)}
+
+        \begin{block}{Acotación del Dominio de Búsqueda}
             \centering
             \scriptsize
             \vspace{0.1cm}
             \begin{tabular}{@{}lcc@{}}
                 \toprule
-                \textbf{Eje} & \textbf{Rango [km]} & \textbf{Justificación Física} \\ \midrule
-                $x$ & $[-5, 5]$ & Cobertura horizontal de la red. \\ \vspace{0.1cm}
-                $y$ & $[-5, 5]$ & Cobertura horizontal de la red. \\ \vspace{0.1cm}
-                $z$ & $[-3, 1]$ & Profundidad del hipocentro. \\ \bottomrule
+                \textbf{Variable} & \textbf{Rango [km]} & \textbf{Justificación} \\ \midrule
+                $x$ & $[-5,\ 5]$ & Cobertura horizontal \\[0.15cm]
+                $y$ & $[-5,\ 5]$ & Cobertura horizontal \\[0.15cm]
+                $z$ & $[-3,\ 1]$ & Profundidad del hipocentro \\[0.15cm]
+                $A_0$ & $[0,\ 50]$ & Amplitud física positiva \\ \bottomrule
             \end{tabular}
         \end{block}
 
-        \vspace{0.4cm}
-        \begin{center}
-            \footnotesize
-            \textbf{Limitar el dominio asegura la convergencia numérica.}
-        \end{center}
+        \vspace{0.2cm}
+
+        \begin{block}{Espacio de Búsqueda}
+            \centering
+            \scriptsize
+            El vector de parámetros es:
+            \[
+                m = [x_{\text{real}},\ y_{\text{real}},\ z_{\text{real}},\ A_0]^T \in \mathbb{R}^4
+            \]
+        \end{block}
+
     \end{columns}
+
+    \vspace{0.1cm}
+    \begin{center}
+        \footnotesize
+        \textbf{Gauss-Newton linealiza iterativamente el modelo no lineal de atenuación.}
+    \end{center}
 
 \end{frame}

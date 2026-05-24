@@ -1,0 +1,69 @@
+% Alejandro
+%=============================================
+% Puntos 1, 2, 3: Por qué E(x,y,z) no se puede visualizar completa,
+% qué significa fijar z, y cortes bidimensionales.
+%=============================================
+
+\section{Visualización y Mapas de Calor}
+
+\begin{frame}{Visualización de $E(x,y,z)$: El Problema Dimensional}
+
+    \begin{columns}[T]
+
+        %===========================================
+        % COLUMNA IZQUIERDA
+        %===========================================
+        \column{0.48\textwidth}
+
+        \begin{block}{¿Por qué no se puede graficar directamente?}
+            \scriptsize
+            La función de error depende \textbf{simultáneamente} de tres variables espaciales:
+            \[
+                E = E(x, y, z)
+            \]
+            \begin{itemize}
+                \item Una gráfica convencional solo admite \textbf{dos dimensiones}.
+                \item Representar $E$ completa requeriría un espacio \textbf{4D}.
+                \item Por tanto, la visualización directa \textbf{no es posible}.
+            \end{itemize}
+            \vspace{0.15cm}
+            \textbf{Estrategia:} Se fija un valor constante de $z$ y se analiza:
+            \[
+                E(x, y)\Big|_{z = z_0}
+            \]
+            Esto reduce el problema a \textbf{dos variables} visualizables.
+        \end{block}
+
+        %===========================================
+        % COLUMNA DERECHA
+        %===========================================
+        \column{0.48\textwidth}
+
+        \begin{block}{¿Qué representa cada corte?}
+            \scriptsize
+            \begin{itemize}
+                \item Cada corte es una \textbf{fotografía} de la función de error a una profundidad fija.
+                \vspace{0.15cm}
+                \item Permite observar la \textbf{distribución espacial} del error en el plano $(x, y)$.
+                \vspace{0.15cm}
+                \item Variando $z$ se obtiene una \textbf{secuencia de cortes} que describe el comportamiento volumétrico de $E$.
+            \end{itemize}
+        \end{block}
+
+        \vspace{0.2cm}
+
+        \begin{block}{Idea Central}
+            \centering
+            \scriptsize
+            Fijar $z$ convierte un problema \textbf{4D} en uno \textbf{2D} visualizable.
+        \end{block}
+
+    \end{columns}
+
+    \vspace{0.2cm}
+    \begin{center}
+        \footnotesize
+        \textbf{Los cortes bidimensionales son la herramienta clave para explorar $E(x,y,z)$.}
+    \end{center}
+
+\end{frame}

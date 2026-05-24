@@ -1,0 +1,51 @@
+% Alejandro
+%=============================================
+% Punto 11: Gráfica Emin(z) — mejor error posible para cada profundidad.
+%=============================================
+
+\begin{frame}{Análisis de Profundidad: Gráfica $E_{\min}(z)$}
+
+    \begin{columns}[T]
+
+        %===========================================
+        % COLUMNA IZQUIERDA: Gráfica
+        %===========================================
+        \column{0.52\textwidth}
+
+        \begin{block}{$E_{\min}(z)$: Valor mínimo del error por profundidad}
+            \centering
+            \includegraphics[width=0.95\textwidth]{Imagenes/emin_z.png}
+        \end{block}
+
+        %===========================================
+        % COLUMNA DERECHA: Interpretación
+        %===========================================
+        \column{0.44\textwidth}
+
+        \begin{block}{¿Qué representa esta gráfica?}
+            \scriptsize
+            \begin{itemize}
+                \item Para cada valor de $z$ se toma el \textbf{mínimo posible} de $E(x,y,z)$ sobre todo el plano $(x,y)$.
+                \vspace{0.15cm}
+                \item La curva resultante muestra \textbf{cómo varía la calidad del ajuste} según la profundidad.
+                \vspace{0.15cm}
+                \item El \textbf{mínimo global} de $E_{\min}(z)$ identifica la profundidad donde el modelo reproduce mejor las observaciones.
+            \end{itemize}
+        \end{block}
+
+        \vspace{0.2cm}
+
+        \begin{exampleblock}{Interpretación Física}
+            \scriptsize
+            El valor de $z$ que minimiza $E_{\min}(z)$ corresponde a la \textbf{profundidad estimada} de la fuente sísmica, complementando los resultados del optimizador numérico.
+        \end{exampleblock}
+
+    \end{columns}
+
+    \vspace{0.15cm}
+    \begin{center}
+        \footnotesize
+        \textbf{$E_{\min}(z)$ convierte el análisis tridimensional en una búsqueda unidimensional interpretable.}
+    \end{center}
+
+\end{frame}

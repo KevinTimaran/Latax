@@ -1,0 +1,72 @@
+% Luis
+%=============================================
+% Puntos 1-4: Resultado final, cercanía fuente estimada/real,
+% relación distancia-amplitud, coherencia del modelo.
+%=============================================
+
+\section{Conclusiones y Defensa Final}
+
+\begin{frame}{Resultados Finales: Validación del Modelo}
+
+    \begin{columns}[T]
+
+        %===========================================
+        % COLUMNA IZQUIERDA: Comparación numérica
+        %===========================================
+        \column{0.50\textwidth}
+
+        \begin{block}{Fuente Real vs. Estimada}
+            \centering
+            \scriptsize
+            \begin{tabular}{@{}lccc@{}}
+                \toprule
+                & $x$ & $y$ & $z$ \\ \midrule
+                \textbf{Real}      & $1.200$ & $-0.800$ & $-1.100$ \\[0.15cm]
+                \textbf{Estimada}  & $1.200$ & $-0.777$ & $-1.138$ \\[0.15cm] \midrule
+                \textbf{Error} $|\Delta|$ & $0.000$ & $0.023$ & $0.038$ \\
+                \bottomrule
+            \end{tabular}
+            \vspace{0.15cm}
+            \tiny \textcolor{gray}{Coordenadas en kilómetros (km).}
+        \end{block}
+
+        \vspace{0.2cm}
+
+        \begin{exampleblock}{Resultado del Proyecto}
+            \scriptsize
+            El proyecto estimó correctamente la ubicación de la fuente sísmica a partir de las amplitudes registradas por sensores distribuidos en el espacio.
+        \end{exampleblock}
+
+        %===========================================
+        % COLUMNA DERECHA: Interpretación
+        %===========================================
+        \column{0.46\textwidth}
+
+        \begin{block}{Cercanía e Interpretación Física}
+            \scriptsize
+            \begin{itemize}
+                \item La fuente estimada quedó \textbf{muy cerca} de la fuente real, validando el modelo.
+                \vspace{0.1cm}
+                \item La amplitud \textbf{disminuye con la distancia} por atenuación y dispersión de la energía.
+                \vspace{0.1cm}
+                \item Las regiones de menor error \textbf{coinciden} con posiciones cercanas a la fuente real.
+            \end{itemize}
+        \end{block}
+
+        \vspace{0.2cm}
+
+        \begin{block}{Coherencia del Modelo}
+            \centering
+            \scriptsize
+            El comportamiento físico y matemático obtenido es \textbf{consistente} con lo esperado.
+        \end{block}
+
+    \end{columns}
+
+    \vspace{0.15cm}
+    \begin{center}
+        \footnotesize
+        \textbf{El modelo reprodujo adecuadamente las mediciones observadas.}
+    \end{center}
+
+\end{frame}

@@ -1,0 +1,61 @@
+% Kevin
+%=============================================
+% Puntos 9, 10: Importancia de la optimización
+% y limitaciones del modelo.
+%=============================================
+
+\begin{frame}{Optimización y Limitaciones del Modelo}
+
+    \begin{columns}[T]
+
+        %===========================================
+        % COLUMNA IZQUIERDA: Optimización
+        %===========================================
+        \column{0.48\textwidth}
+
+        \begin{block}{¿Por qué fue importante optimizar?}
+            \scriptsize
+            \begin{itemize}
+                \item La optimización permitió identificar \textbf{automáticamente} la región del espacio donde el error era mínimo.
+                \vspace{0.15cm}
+                \item Sin ella, habría que evaluar manualmente infinitas combinaciones de $(x, y, z)$.
+                \vspace{0.15cm}
+                \item Es el puente entre el \textbf{modelo matemático} y la \textbf{solución física}.
+            \end{itemize}
+        \end{block}
+
+        \vspace{0.2cm}
+
+        \begin{exampleblock}{Idea Clave}
+            \centering
+            \scriptsize
+            Buscar el mínimo de $E$ equivale a \textbf{encontrar la fuente sísmica}.
+        \end{exampleblock}
+
+        %===========================================
+        % COLUMNA DERECHA: Limitaciones
+        %===========================================
+        \column{0.48\textwidth}
+
+        \begin{block}{Limitaciones del Modelo}
+            \scriptsize
+            \begin{itemize}
+                \item \textbf{Medio homogéneo:} se asumió propagación uniforme, sin variaciones del terreno.
+                \vspace{0.1cm}
+                \item \textbf{Mínimos locales:} la optimización podría converger a un mínimo no global.
+                \vspace{0.1cm}
+                \item \textbf{Sensibilidad al ruido:} el ruido en las mediciones afecta la precisión de la estimación.
+                \vspace{0.1cm}
+                \item \textbf{Sensores limitados:} solo 12 estaciones restringen la resolución espacial.
+            \end{itemize}
+        \end{block}
+
+    \end{columns}
+
+    \vspace{0.15cm}
+    \begin{center}
+        \footnotesize
+        \textbf{Reconocer las limitaciones fortalece la validez científica del modelo.}
+    \end{center}
+
+\end{frame}

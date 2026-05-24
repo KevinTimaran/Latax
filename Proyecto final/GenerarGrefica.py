@@ -1,13 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.cm as cm
+from matplotlib import cm
+from matplotlib.ticker import ScalarFormatter
 import os
 
 # ============================================================
-# DATOS DEL PROYECTO
+# DATOS DEL PROYECTO (sin cambios)
 # ============================================================
 
-# Sensores: (x, y, z, A_obs)
 sensores = np.array([
     [-4.0, -3.0,  0.2, 0.005219],
     [-2.5,  2.8, -0.1, 0.009811],
@@ -23,14 +23,14 @@ sensores = np.array([
     [ 1.0,  3.2,  0.2, 0.037284],
 ])
 
-A0            = 10.0
-fuente_real   = np.array([1.2, -0.8, -1.1])
-fuente_est    = np.array([1.200079, -0.776502, -1.138095])
+A0          = 10.0
+fuente_real = np.array([1.2, -0.8, -1.1])
+z_fijo      = -1.10   # profundidad real
 
 os.makedirs("Imagenes", exist_ok=True)
 
 # ============================================================
-# FUNCIÓN DE ERROR
+# FUNCIÓN DE ERROR (sin cambios)
 # ============================================================
 
 def error(x, y, z):
@@ -40,155 +40,111 @@ def error(x, y, z):
     return np.sum((Aobs - Apred)**2)
 
 # ============================================================
-# GRILLA BASE
+# SUPERFICIE 3D SEMI‑TRANSPARENTE – LÍNEA SIEMPRE VISIBLE
 # ============================================================
 
-N  = 300
+N  = 200
 xs = np.linspace(-5, 5, N)
 ys = np.linspace(-5, 5, N)
 XX, YY = np.meshgrid(xs, ys)
 
-# ============================================================
-# 1. MAPAS DE CALOR — 4 cortes de profundidad
-# ============================================================
+EE = np.zeros_like(XX)
+for i in range(N):
+    for j in range(N):
+        EE[i, j] = error(XX[i, j], YY[i, j], z_fijo)
 
-cortes = {
-    "z = -0.50  (plano superficial)":  (-0.50, "corte_z_050.png"),
-    "z = -1.10  (profundidad real)":   (-1.10, "corte_z_110.png"),
-    "z = -1.14  (profundidad estimada)":(-1.14, "corte_z_114.png"),
-    "z = -1.70  (plano profundo)":     (-1.70, "corte_z_170.png"),
-}
+vmax = np.percentile(EE, 92)
+EE_plot = np.clip(EE, None, vmax)
 
-for titulo, (z_val, nombre) in cortes.items():
+idx_min = np.unravel_index(EE.argmin(), EE.shape)
+x_min, y_min, E_min = XX[idx_min], YY[idx_min], EE[idx_min]
 
-    EE = np.zeros_like(XX)
-    for i in range(N):
-        for j in range(N):
-            EE[i, j] = error(XX[i, j], YY[i, j], z_val)
+# -------------------- Configuración visual --------------------
+plt.style.use('dark_background')
+fig = plt.figure(figsize=(9, 7), facecolor='black')
+ax  = fig.add_subplot(111, projection='3d', facecolor='black')
 
-    # Recorte para visualizar mejor (percentil 95)
-    vmax = np.percentile(EE, 95)
+stride = 6
+surf = ax.plot_surface(XX, YY, EE_plot,
+                       cmap=cm.plasma,
+                       rstride=stride, cstride=stride,
+                       linewidth=0.15,
+                       edgecolor='#cccccc',
+                       antialiased=True,
+                       alpha=0.75,          # ← ¡clave! transparencia ligera
+                       shade=True,
+                       lightsource=plt.matplotlib.colors.LightSource(azdeg=320, altdeg=45))
 
-    fig, ax = plt.subplots(figsize=(6, 5))
+offset = np.min(EE_plot) * 0.95
+ax.contourf(XX, YY, EE_plot, zdir='z', offset=offset,
+            levels=50, cmap=cm.plasma, alpha=0.6, antialiased=True)
 
-    pcm = ax.pcolormesh(XX, YY, EE,
-                        cmap="coolwarm_r",
-                        vmin=EE.min(), vmax=vmax,
-                        shading="auto")
+# ---------- Punto mínimo con halo ----------
+ax.scatter(x_min, y_min, E_min,
+           color='red', s=400, alpha=0.25, edgecolors='none',
+           depthshade=False, zorder=9)
+ax.scatter(x_min, y_min, E_min,
+           color='red', s=200, alpha=0.4, edgecolors='none',
+           depthshade=False, zorder=10)
+ax.scatter(x_min, y_min, E_min,
+           color='#ff0000', s=160, edgecolor='white',
+           linewidth=2.8, depthshade=False,
+           label='Mínimo global', zorder=11)
 
-    # Curvas de nivel
-    niveles = np.linspace(EE.min(), vmax, 12)
-    ax.contour(XX, YY, EE, levels=niveles,
-               colors="black", linewidths=0.5, alpha=0.5)
+# ---------- Línea vertical siempre visible ----------
+# Capa blanca de fondo (ancha y semitransparente)
+ax.plot([x_min, x_min], [y_min, y_min], [E_min, vmax],
+        color='white', linewidth=5, alpha=0.7, zorder=8)
+# Línea roja principal con marcadores cada 10% del recorrido
+ax.plot([x_min, x_min], [y_min, y_min], [E_min, vmax],
+        color='#ff0000', linestyle='-', linewidth=2.8, alpha=1.0,
+        marker='o', markevery=(1, 0.1), markersize=9,
+        markerfacecolor='#ff0000', markeredgecolor='white',
+        markeredgewidth=2.2, zorder=12)
 
-    # Fuente real y estimada
-    ax.plot(*fuente_real[:2], "w*", markersize=12,
-            label="Fuente real", zorder=5)
-    ax.plot(*fuente_est[:2],  "yx", markersize=10,
-            markeredgewidth=2, label="Fuente estimada", zorder=5)
+# ---------- Ejes y etiquetas ----------
+ax.set_xlabel("$x$ [km]", fontsize=13, color='white', labelpad=12)
+ax.set_ylabel("$y$ [km]", fontsize=13, color='white', labelpad=12)
+ax.set_zlabel("$E(x,y)$", fontsize=13, color='white', labelpad=12)
 
-    # Sensores
-    ax.scatter(sensores[:,0], sensores[:,1],
-               c="white", edgecolors="black",
-               s=40, zorder=6, label="Sensores")
+for axis in [ax.xaxis, ax.yaxis, ax.zaxis]:
+    axis.set_major_formatter(ScalarFormatter(useMathText=True))
+    axis.set_tick_params(labelsize=9, colors='white')
+ax.ticklabel_format(style='sci', scilimits=(-2,3), axis='z')
 
-    plt.colorbar(pcm, ax=ax, label="$E(x,y,z)$")
-    ax.set_xlabel("$x$", fontsize=11)
-    ax.set_ylabel("$y$", fontsize=11)
-    ax.set_title(f"Mapa de calor — {titulo}", fontsize=10)
-    ax.legend(fontsize=8, loc="upper left")
-    ax.set_aspect("equal")
+ax.xaxis.pane.fill = False
+ax.yaxis.pane.fill = False
+ax.zaxis.pane.fill = False
+ax.xaxis.pane.set_edgecolor('white')
+ax.yaxis.pane.set_edgecolor('white')
+ax.zaxis.pane.set_edgecolor('white')
 
-    plt.tight_layout()
-    plt.savefig(f"Imagenes/{nombre}", dpi=150, bbox_inches="tight")
-    plt.close()
-    print(f"Guardada: Imagenes/{nombre}")
+ax.grid(True, color='white', alpha=0.15, linestyle=':')
 
-# ============================================================
-# 2. GRÁFICA Emin(z)
-# ============================================================
+ax.set_title("Superficie de error $E(x,y)$\n"
+             f"(corte en $z = {z_fijo}$ km)",
+             fontsize=14, color='white', pad=20,
+             bbox=dict(facecolor='black', edgecolor='white',
+                       boxstyle='round,pad=0.5', alpha=0.8))
 
-zs     = np.linspace(-3, 1, 200)
-Emin_z = []
+ax.legend(fontsize=10, loc='upper right', framealpha=0.7,
+          facecolor='gray', edgecolor='white')
 
-for z_val in zs:
-    EE = np.array([error(XX[i,j], YY[i,j], z_val)
-                   for i in range(N) for j in range(N)])
-    Emin_z.append(EE.min())
+ax.view_init(elev=25, azim=-125)
 
-Emin_z = np.array(Emin_z)
-
-fig, ax = plt.subplots(figsize=(7, 4))
-ax.plot(zs, Emin_z, color="steelblue", linewidth=2)
-
-# Marcar profundidades clave
-for z_mark, etiqueta, color in [
-    (-0.50,  "$z=-0.50$",  "gray"),
-    (-1.10,  "$z=-1.10$ (real)",  "green"),
-    (-1.14,  "$z=-1.14$ (est.)", "orange"),
-    (-1.70,  "$z=-1.70$",  "red"),
-]:
-    idx   = np.argmin(np.abs(zs - z_mark))
-    ax.axvline(z_mark, color=color, linestyle="--", linewidth=1, alpha=0.7)
-    ax.plot(zs[idx], Emin_z[idx], "o", color=color, markersize=6)
-    ax.text(z_mark + 0.04, Emin_z[idx] * 1.05,
-            etiqueta, fontsize=8, color=color)
-
-ax.set_xlabel("Profundidad $z$", fontsize=11)
-ax.set_ylabel("$E_{\\min}(z)$",  fontsize=11)
-ax.set_title("Valor mínimo del error por profundidad $E_{\\min}(z)$", fontsize=11)
-ax.grid(True, alpha=0.3)
-plt.tight_layout()
-plt.savefig("Imagenes/emin_z.png", dpi=150, bbox_inches="tight")
-plt.close()
-print("Guardada: Imagenes/emin_z.png")
-
-# ============================================================
-# 3. TRAYECTORIA DEL MÍNIMO en el plano (x,y)
-# ============================================================
-
-zs_tray = np.linspace(-3, 1, 100)
-tray_x, tray_y, tray_E = [], [], []
-
-for z_val in zs_tray:
-    EE   = np.array([[error(XX[i,j], YY[i,j], z_val)
-                       for j in range(N)] for i in range(N)])
-    idx  = np.unravel_index(EE.argmin(), EE.shape)
-    tray_x.append(XX[idx])
-    tray_y.append(YY[idx])
-    tray_E.append(EE[idx])
-
-tray_x = np.array(tray_x)
-tray_y = np.array(tray_y)
-tray_E = np.array(tray_E)
-
-fig, ax = plt.subplots(figsize=(6, 5))
-
-sc = ax.scatter(tray_x, tray_y, c=zs_tray,
-                cmap="plasma", s=15, zorder=3)
-plt.colorbar(sc, ax=ax, label="Profundidad $z$")
-
-# Fuente real y estimada
-ax.plot(*fuente_real[:2], "g*", markersize=14,
-        label="Fuente real", zorder=6)
-ax.plot(*fuente_est[:2],  "rx", markersize=10,
-        markeredgewidth=2, label="Fuente estimada", zorder=6)
-
-# Sensores
-ax.scatter(sensores[:,0], sensores[:,1],
-           c="gray", edgecolors="black",
-           s=40, zorder=5, label="Sensores")
-
-ax.set_xlabel("$x$", fontsize=11)
-ax.set_ylabel("$y$", fontsize=11)
-ax.set_title("Trayectoria del mínimo en el plano $(x,y)$", fontsize=11)
-ax.legend(fontsize=8)
-ax.set_aspect("equal")
-ax.grid(True, alpha=0.3)
+cbar = fig.colorbar(surf, ax=ax, shrink=0.55, aspect=15, pad=0.08)
+cbar.set_label("Error $E$", fontsize=12, color='white')
+cbar.ax.yaxis.set_tick_params(color='white', labelcolor='white')
+cbar.outline.set_edgecolor('white')
 
 plt.tight_layout()
-plt.savefig("Imagenes/trayectoria_minimo.png", dpi=150, bbox_inches="tight")
-plt.close()
-print("Guardada: Imagenes/trayectoria_minimo.png")
 
-print("\nTodas las imágenes generadas correctamente.")
+# ============================================================
+# GUARDAR Y MOSTRAR INTERACTIVO
+# ============================================================
+plt.savefig("Imagenes/superficie_error_3d.png", dpi=200,
+            facecolor=fig.get_facecolor(), bbox_inches="tight")
+plt.show()
+
+print(f"Mínimo en: x={x_min:.3f}, y={y_min:.3f}, E={E_min:.6e}")
+print("Guardada: Imagenes/superficie_error_3d.png")

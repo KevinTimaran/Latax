@@ -14,7 +14,7 @@
             % 1. Plano de la superficie terrestre (z = 0)
             \fill[gray!10, opacity=0.9] (-1,-1,0) -- (6,-1,0) -- (6,6,0) -- (-1,6,0) -- cycle;
             \draw[gray!40, thin, step=1] (-1,-1,0) grid (6,6,0);
-            \node[anchor=west, text=gray!80!black] at (5.5, 5.5, 0) {Superficie Terrestre ($z=0$)};
+            \node[anchor=west, text=gray!80!black] at (5.5, 5.5, 0) {Superficie Terrestre ($z=0$ km)};
 
             % 2. Ejes Coordenados
             \draw[thick,->, black!70] (0,0,0) -- (7,0,0) node[below right] {$x$};
@@ -31,7 +31,7 @@
             
             % Punto central de la fuente
             \fill[red] (Hipocentro) circle (3pt);
-            \node[below, font=\bfseries, text=red!80!black, yshift=-3mm] at (Hipocentro) {Fuente: $(x_{Real}, y_{Real}, z_{Real})$};
+            \node[below, font=\bfseries, text=red!80!black, yshift=-3mm] at (Hipocentro) {Fuente: $(x_{\text{real}}, y_{\text{real}}, z_{\text{real}})$};
 
             % 4. Sensores en la superficie y vectores de distancia
             % Coordenadas de los sensores

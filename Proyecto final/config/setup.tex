@@ -22,12 +22,12 @@
 		\vbox{}\vskip-1ex%
 		\if@tempswa\else\csname beamer@fte#1\endcsname\fi%
 		\hbox to \linewidth{%
+			\strut\insertframetitle\strut%
 			\hfill%
 			{\scriptsize\hyperlinkslideprev{\beamerbutton{$\leftarrow$}}}%
 			\hspace{0.35em}%
 			{\scriptsize\hyperlinkslidenext{\beamerbutton{$\rightarrow$}}}%
-		}%
-		\strut\insertframetitle\strut\par%
+		}\par%
 		{%
 			\ifx\insertframesubtitle\@empty%
 			\else%

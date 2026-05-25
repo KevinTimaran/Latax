@@ -505,23 +505,5 @@
 - **Con integrante asignado:** 40
 - **Sin integrante asignado:** 2 *(Diapositivas 1 y 2: titlepage y tableofcontents, generadas automáticamente por main.tex)*
 
-### Distribución por integrante:
 
-| Integrante | Diapositivas |
-|------------|--------------|
-| Danilo | 3, 4, 5, 9, 10, 11, 12, 36 → **8 diapositivas** |
-| Kevin | 6, 7, 8, 20, 21, 40, 41, 42 → **8 diapositivas** |
-| Luis |  13, 14, 15, 16, 17, 18, 19, 39 → **8 diapositivas** |
-| David |  22, 23, 24, 25, 26, 35, 37, 38 → **8 diapositivas** |
-| El mono | 27, 28, 29, 30, 31, 32, 33, 34→ **8 diapositivas** |
-| Sin asignar | 1, 2 → **2 diapositivas** |
-
-
-| Integrante | Diapositivas |
-|------------|--------------|
-| Danilo | 3, 4, 5, 6, 9, 10    → **6 diapositivas** |
 | Kevin |7, 8,  18, 19, 39, 40, 41, 42 → **8 diapositivas** |
-| Luis |  11, 12, 13, 14, 15, 16, 17, → **7 diapositivas** |
-| David |  20, 21, 22, 38    → **4 diapositivas** |
-| El mono |23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37   → **15 diapositivas** |
-| Sin asignar | 1, 2 → **2 diapositivas** |

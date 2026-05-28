@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superficie de Error E(x,y,z) — Cortes de exposición</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <style>
+        @import url('https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.0/300,400,500,600,700.css');
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:#000; color:#e0e0e0; font-family:'Inter',sans-serif; overflow:hidden; height:100vh; width:100vw; }
+        #canvas-container { position:fixed; top:0; left:0; width:100%; height:100%; }
+        canvas { display:block; }
+
+        .overlay { position:fixed; pointer-events:none; z-index:10; }
+
+        .title-bar {
+            top:14px; left:50%; transform:translateX(-50%);
+            text-align:center; background:rgba(0,0,0,0.9);
+            border:1px solid rgba(255,255,255,0.12); border-radius:4px;
+            padding:10px 28px; box-shadow:0 2px 16px rgba(0,0,0,0.6);
+        }
+        .title-bar h1 { font-size:15px; font-weight:700; color:#fff; letter-spacing:0.5px; margin-bottom:2px; }
+        .title-bar p { font-size:11px; color:rgba(255,255,255,0.45); font-weight:400; }
+
+        .info-panel {
+            top:90px; right:16px; background:rgba(0,0,0,0.92);
+            border:1px solid rgba(255,255,255,0.08); border-radius:4px;
+            padding:14px 16px; min-width:230px; max-height:70vh; overflow-y:auto;
+            box-shadow:0 2px 16px rgba(0,0,0,0.5); pointer-events:auto; font-size:11px;
+        }
+        .info-panel h3 {
+            font-size:10px; text-transform:uppercase; letter-spacing:1.2px;
+            color:rgba(255,255,255,0.35); margin-bottom:8px; font-weight:700;
+            border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:5px;
+        }
+        .info-row { display:flex; justify-content:space-between; padding:4px 0; }
+        .info-label { color:rgba(255,255,255,0.45); font-size:10px; }
+        .info-value { font-weight:600; color:#fff; font-family:monospace; font-size:10px; }
+        .info-value.red { color:#ff4444; }
+        .info-value.orange { color:#ffaa00; }
+        .info-value.cyan { color:#00ddff; }
+
+        .legend-panel {
+            bottom:14px; right:16px; background:rgba(0,0,0,0.92);
+            border:1px solid rgba(255,255,255,0.08); border-radius:4px;
+            padding:10px 16px; display:flex; flex-direction:column; gap:7px;
+            box-shadow:0 2px 16px rgba(0,0,0,0.5); pointer-events:auto;
+        }
+        .legend-item { display:flex; align-items:center; gap:8px; }
+        .legend-icon { width:14px; height:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+        .legend-icon.dot-red { width:8px; height:8px; border-radius:50%; background:#ff4444; border:1px solid #ff6666; }
+        .legend-icon.dot-orange { width:8px; height:8px; border-radius:50%; background:#ffaa00; border:1px solid #ffcc44; }
+        .legend-icon.dot-cyan { width:8px; height:8px; border-radius:50%; background:#00ddff; border:1px solid #66eeff; }
+        .legend-icon.mountain { width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:10px solid #888; }
+        .legend-text { font-size:10px; color:rgba(255,255,255,0.6); font-weight:500; }
+
+        .controls-bar {
+            position:fixed; bottom:40px; left:50%; transform:translateX(-50%);
+            z-index:10; display:flex; align-items:center; gap:14px;
+            background:rgba(0,0,0,0.85); border:1px solid rgba(255,255,255,0.15);
+            border-radius:4px; padding:8px 20px; pointer-events:auto;
+            flex-wrap:wrap; justify-content:center;
+        }
+        .controls-bar label { font-size:11px; color:#ccc; font-weight:500; white-space:nowrap; }
+        .controls-bar input[type=range] { width:160px; }
+        .controls-bar span { font-size:11px; color:#fff; font-weight:600; min-width:50px; display:inline-block; text-align:center; }
+        .cut-buttons { display:flex; gap:8px; }
+        .cut-btn {
+            background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
+            color:#fff; border-radius:3px; padding:4px 10px; font-size:11px; cursor:pointer;
+            white-space:nowrap;
+        }
+        .cut-btn:hover { background:rgba(255,255,255,0.2); }
+        .cut-btn.active { background:#1e90ff; border-color:#1e90ff; font-weight:bold; }
+
+        .controls-hint {
+            position:fixed; bottom:14px; left:16px; z-index:10;
+            font-size:9px; color:rgba(255,255,255,0.3); pointer-events:none;
+        }
+        .controls-hint kbd {
+            background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);
+            border-radius:2px; padding:1px 4px; font-size:8px; color:rgba(255,255,255,0.4);
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+
+    <div class="overlay title-bar">
+        <h1>Superficie de error E(x, y, z)</h1>
+        <p>Cortes de exposición · Mínimo cercano a fuente real en z=-1.10</p>
+    </div>
+
+    <div class="overlay info-panel" id="info-panel">
+        <h3>🔴 Fuente Real</h3>
+        <div class="info-row"><span class="info-label">x</span><span class="info-value red">1.200000</span></div>
+        <div class="info-row"><span class="info-label">y</span><span class="info-value red">-0.800000</span></div>
+        <div class="info-row"><span class="info-label">z</span><span class="info-value red">-1.100000</span></div>
+
+        <h3 style="margin-top:12px;">🟠 Fuente Estimada</h3>
+        <div class="info-row"><span class="info-label">x</span><span class="info-value orange">1.200079</span></div>
+        <div class="info-row"><span class="info-label">y</span><span class="info-value orange">-0.776502</span></div>
+        <div class="info-row"><span class="info-label">z</span><span class="info-value orange">-1.138095</span></div>
+
+        <h3 style="margin-top:12px;">🟡 Mínimo en este corte</h3>
+        <div class="info-row"><span class="info-label">x</span><span class="info-value cyan" id="val-xmin">—</span></div>
+        <div class="info-row"><span class="info-label">y</span><span class="info-value cyan" id="val-ymin">—</span></div>
+        <div class="info-row"><span class="info-label">E_min</span><span class="info-value cyan" id="val-emin">—</span></div>
+
+        <h3 style="margin-top:12px;">Sensores (12)</h3>
+        <div id="sensor-list"></div>
+    </div>
+
+    <div class="overlay legend-panel">
+        <div class="legend-item"><div class="legend-icon dot-red"></div><span class="legend-text">Fuente real</span></div>
+        <div class="legend-item"><div class="legend-icon dot-orange"></div><span class="legend-text">Fuente estimada</span></div>
+        <div class="legend-item"><div class="legend-icon dot-cyan"></div><span class="legend-text">Mínimo del corte</span></div>
+        <div class="legend-item"><div class="legend-icon mountain"></div><span class="legend-text">Sensor (montaña)</span></div>
+    </div>
+
+    <!-- Barra de controles unificada -->
+    <div class="controls-bar">
+        <label>Profundidad z:</label>
+        <input type="range" id="z-slider" min="-3.0" max="1.0" step="0.02" value="-1.10">
+        <span id="z-value">-1.10</span>
+        <div class="cut-buttons">
+            <button class="cut-btn" data-z="-0.50">−0.50</button>
+            <button class="cut-btn active" data-z="-1.10">−1.10</button>
+            <button class="cut-btn" data-z="-1.14">−1.14</button>
+            <button class="cut-btn" data-z="-1.70">−1.70</button>
+        </div>
+    </div>
+
+    <div class="controls-hint">
+        <span><kbd>🖱️</kbd> Rotar</span>
+        <span><kbd>Scroll</kbd> Zoom</span>
+        <span><kbd>Right drag</kbd> Mover</span>
+    </div>
+
+    <script>
+    (function() {
+        // =============================================
+        // Datos de sensores (reemplaza con tu Excel si cambian)
+        // =============================================
+        const misSensores = [
+            [-4.0, -3.0,  0.2, 0.005219],
+            [-2.5,  2.8, -0.1, 0.009811],
+            [ 0.0,  4.0,  0.1, 0.012014],
+            [ 3.5,  3.0, -0.2, 0.024570],
+            [ 4.5, -1.5,  0.0, 0.080580],
+            [ 2.0, -4.0,  0.3, 0.071733],
+            [-1.0, -4.5, -0.1, 0.027704],
+            [-4.5,  1.0,  0.2, 0.003556],
+            [ 0.5,  0.5,  0.0, 0.852685],
+            [ 2.8,  0.8, -0.3, 0.380182],
+            [-1.8, -1.2,  0.1, 0.119785],
+            [ 1.0,  3.2,  0.2, 0.037284],
+        ];
+
+        const A0 = 10.0;
+        const fuenteReal = [1.2, -0.8, -1.1];
+        const fuenteEstimada = [1.200079, -0.776502, -1.138095];
+
+        // Función de error (exactamente igual a tu Python)
+        function computeError(x, y, z, sensores) {
+            let sum = 0;
+            for (let s of sensores) {
+                const dx = s[0] - x, dy = s[1] - y, dz = s[2] - z;
+                const R = Math.sqrt(dx*dx + dy*dy + dz*dz);
+                const Apred = A0 * Math.exp(-R) / Math.max(R, 1e-8);
+                sum += (s[3] - Apred) ** 2;
+            }
+            return sum;
+        }
+
+        // Escena Three.js
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000000);
+        scene.fog = new THREE.FogExp2(0x000000, 0.015);
+
+        const camera = new THREE.PerspectiveCamera(42, window.innerWidth/window.innerHeight, 0.1, 500);
+        camera.position.set(12, 8, 13);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.0;
+        container.appendChild(renderer.domElement);
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.08;
+        controls.target.set(0, 1.5, 0);
+        controls.minDistance = 5;
+        controls.maxDistance = 45;
+        controls.update();
+
+        scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+        const dl = new THREE.DirectionalLight(0xffffff, 0.8);
+        dl.position.set(10, 18, 10);
+        scene.add(dl);
+        scene.add(new THREE.DirectionalLight(0x8888ff, 0.3));
+
+        // Paleta VIRIDIS
+        function viridisColor(t) {
+            t = Math.max(0, Math.min(1, t));
+            const stops = [
+                [0.267, 0.004, 0.329],
+                [0.282, 0.095, 0.486],
+                [0.262, 0.190, 0.553],
+                [0.218, 0.282, 0.577],
+                [0.163, 0.371, 0.557],
+                [0.112, 0.457, 0.496],
+                [0.077, 0.540, 0.406],
+                [0.090, 0.619, 0.295],
+                [0.145, 0.693, 0.180],
+                [0.245, 0.758, 0.084],
+                [0.367, 0.810, 0.047],
+                [0.537, 0.848, 0.022],
+                [0.741, 0.873, 0.009],
+                [0.993, 0.906, 0.144],
+            ];
+            const idx = t * (stops.length - 1);
+            const i = Math.floor(idx), f = idx - i;
+            if (i >= stops.length - 1) return stops[stops.length - 1];
+            const a = stops[i], b = stops[i+1];
+            return [a[0]+f*(b[0]-a[0]), a[1]+f*(b[1]-a[1]), a[2]+f*(b[2]-a[2])];
+        }
+
+        const N = 140;
+        const xMin = -5, xMax = 5, yMin = -5, yMax = 5;
+        const scaleH = 1.0;
+        let currentZ = -1.10;
+        let surfaceMesh, surfaceWire, sensorConesGroup, sensorLabelsGroup, minSphere;
+
+        sensorConesGroup = new THREE.Group();
+        scene.add(sensorConesGroup);
+        sensorLabelsGroup = new THREE.Group();
+        scene.add(sensorLabelsGroup);
+
+        // Puntos fijos
+        const puntoReal = new THREE.Mesh(new THREE.SphereGeometry(0.2,16,16), new THREE.MeshBasicMaterial({color:0xff4444}));
+        scene.add(puntoReal);
+        const puntoEstimado = new THREE.Mesh(new THREE.SphereGeometry(0.2,16,16), new THREE.MeshBasicMaterial({color:0xffaa00}));
+        scene.add(puntoEstimado);
+        minSphere = new THREE.Mesh(new THREE.SphereGeometry(0.2,16,16), new THREE.MeshBasicMaterial({color:0x00ddff}));
+        scene.add(minSphere);
+
+        // Crear textura para etiquetas de sensores (sprites)
+        function createLabelSprite(text) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 64;
+            canvas.height = 32;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 18px Inter, Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, 32, 16);
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.minFilter = THREE.LinearFilter;
+            const material = new THREE.SpriteMaterial({ map: texture, depthTest: false, depthWrite: false });
+            const sprite = new THREE.Sprite(material);
+            sprite.scale.set(0.6, 0.3, 1);
+            return sprite;
+        }
+
+        function buildSurface(zVal) {
+            if (surfaceMesh) scene.remove(surfaceMesh);
+            if (surfaceWire) scene.remove(surfaceWire);
+
+            const dx = (xMax - xMin) / (N - 1);
+            const dy = (yMax - yMin) / (N - 1);
+            const grid = [];
+            let emin = Infinity, xmin = 0, ymin = 0;
+
+            for (let i = 0; i < N; i++) {
+                grid[i] = [];
+                const xv = xMin + i * dx;
+                for (let j = 0; j < N; j++) {
+                    const yv = yMin + j * dy;
+                    const e = computeError(xv, yv, zVal, misSensores);
+                    grid[i][j] = e;
+                    if (e < emin) { emin = e; xmin = xv; ymin = yv; }
+                }
+            }
+
+            const allE = grid.flat().sort((a,b)=>a-b);
+            const vMax = allE[Math.floor(allE.length * 0.92)];
+
+            const geo = new THREE.BufferGeometry();
+            const verts = [], norms = [], cols = [], idxs = [];
+
+            for (let i = 0; i < N; i++) {
+                for (let j = 0; j < N; j++) {
+                    const xv = xMin + i*dx, yv = yMin + j*dy;
+                    const e = Math.min(grid[i][j], vMax);
+                    const zv = e * scaleH;
+                    verts.push(xv, zv, yv);
+
+                    const eL = i>0 ? Math.min(grid[i-1][j], vMax) : e;
+                    const eR = i<N-1 ? Math.min(grid[i+1][j], vMax) : e;
+                    const eD = j>0 ? Math.min(grid[i][j-1], vMax) : e;
+                    const eU = j<N-1 ? Math.min(grid[i][j+1], vMax) : e;
+                    const dzdx = (eR - eL)/(2*dx)*scaleH;
+                    const dzdy = (eU - eD)/(2*dy)*scaleH;
+                    const n = Math.sqrt(dzdx*dzdx + 1 + dzdy*dzdy);
+                    norms.push(-dzdx/n, 1/n, -dzdy/n);
+
+                    const c = viridisColor(e / vMax);
+                    cols.push(c[0], c[1], c[2]);
+                }
+            }
+
+            for (let i = 0; i < N-1; i++) {
+                for (let j = 0; j < N-1; j++) {
+                    const a = i*N+j, b = a+1, c = a+N, d = c+1;
+                    idxs.push(a, c, b, b, c, d);
+                }
+            }
+
+            geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+            geo.setAttribute('normal', new THREE.Float32BufferAttribute(norms, 3));
+            geo.setAttribute('color', new THREE.Float32BufferAttribute(cols, 3));
+            geo.setIndex(idxs);
+
+            const mat = new THREE.MeshPhongMaterial({
+                vertexColors: true, side: THREE.DoubleSide,
+                transparent: true, opacity: 0.88,
+                shininess: 40, specular: new THREE.Color(0x111122)
+            });
+            surfaceMesh = new THREE.Mesh(geo, mat);
+            scene.add(surfaceMesh);
+
+            const wireMat = new THREE.MeshBasicMaterial({ color:0xffffff, wireframe:true, transparent:true, opacity:0.02 });
+            surfaceWire = new THREE.Mesh(geo, wireMat);
+            scene.add(surfaceWire);
+
+            return { xmin, ymin, emin, vMax, grid };
+        }
+
+        function buildSensorPeaks(zVal, grid, vMax) {
+            // Limpiar conos y etiquetas anteriores
+            while(sensorConesGroup.children.length > 0) {
+                sensorConesGroup.remove(sensorConesGroup.children[0]);
+            }
+            while(sensorLabelsGroup.children.length > 0) {
+                sensorLabelsGroup.remove(sensorLabelsGroup.children[0]);
+            }
+
+            const dx = (xMax - xMin) / (N - 1);
+            const dy = (yMax - yMin) / (N - 1);
+            const coneGeo = new THREE.ConeGeometry(0.12, 0.4, 10);
+            const tipGeo = new THREE.SphereGeometry(0.05, 6, 6);
+
+            misSensores.forEach((s, idx) => {
+                const sx = s[0], sy = s[1];
+                const gi = Math.round((sx - xMin)/dx);
+                const gj = Math.round((sy - yMin)/dy);
+                const eSensor = (gi>=0 && gi<N && gj>=0 && gj<N) ? Math.min(grid[gi][gj], vMax) : computeError(sx, sy, zVal, misSensores);
+                const baseZ = Math.min(eSensor, vMax) * scaleH;
+                const coneMat = new THREE.MeshPhongMaterial({ color: 0x888888, emissive: new THREE.Color(0x222222) });
+                const cone = new THREE.Mesh(coneGeo, coneMat);
+                cone.position.set(sx, baseZ + 0.2, sy);
+                sensorConesGroup.add(cone);
+
+                const tip = new THREE.Mesh(tipGeo, new THREE.MeshBasicMaterial({ color: 0xcccccc }));
+                tip.position.set(sx, baseZ + 0.4, sy);
+                sensorConesGroup.add(tip);
+
+                // Etiqueta S1...S12
+                const label = createLabelSprite(`S${idx+1}`);
+                label.position.set(sx, baseZ + 0.7, sy);  // flotando sobre la punta
+                sensorLabelsGroup.add(label);
+            });
+        }
+
+        function updatePoints(zVal) {
+            const errReal = computeError(fuenteReal[0], fuenteReal[1], zVal, misSensores);
+            puntoReal.position.set(fuenteReal[0], Math.min(errReal, 5)*scaleH, fuenteReal[1]);
+
+            const errEst = computeError(fuenteEstimada[0], fuenteEstimada[1], zVal, misSensores);
+            puntoEstimado.position.set(fuenteEstimada[0], Math.min(errEst, 5)*scaleH, fuenteEstimada[1]);
+        }
+
+        function updateForZ(zVal) {
+            const { xmin, ymin, emin, vMax, grid } = buildSurface(zVal);
+            buildSensorPeaks(zVal, grid, vMax);
+            updatePoints(zVal);
+
+            minSphere.position.set(xmin, Math.min(emin, vMax)*scaleH, ymin);
+            document.getElementById('val-xmin').textContent = xmin.toFixed(4);
+            document.getElementById('val-ymin').textContent = ymin.toFixed(4);
+            document.getElementById('val-emin').textContent = emin.toExponential(4);
+            document.getElementById('z-value').textContent = zVal.toFixed(2);
+            currentZ = zVal;
+
+            // Actualizar botones activos
+            document.querySelectorAll('.cut-btn').forEach(btn => {
+                const btnZ = parseFloat(btn.getAttribute('data-z'));
+                if (Math.abs(btnZ - zVal) < 0.001) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        // Inicializar con z = -1.10
+        updateForZ(-1.10);
+
+        // Slider
+        const slider = document.getElementById('z-slider');
+        slider.addEventListener('input', () => {
+            updateForZ(parseFloat(slider.value));
+        });
+
+        // Botones de cortes
+        document.querySelectorAll('.cut-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const z = parseFloat(btn.getAttribute('data-z'));
+                slider.value = z;
+                updateForZ(z);
+            });
+        });
+
+        // Suelo
+        const floorGeo = new THREE.PlaneGeometry(12,12);
+        const floor = new THREE.Mesh(floorGeo, new THREE.MeshBasicMaterial({color:0x080808, transparent:true, opacity:0.3, side:THREE.DoubleSide}));
+        floor.rotation.x = -Math.PI/2;
+        floor.position.y = -0.5;
+        scene.add(floor);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const t = performance.now() * 0.001;
+            minSphere.scale.setScalar(1 + 0.1*Math.sin(t*3));
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth/window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Lista de sensores en panel
+        const sensorListEl = document.getElementById('sensor-list');
+        misSensores.forEach((s, i) => {
+            const row = document.createElement('div');
+            row.className = 'info-row';
+            row.innerHTML = `<span class="info-label">S${i+1} (${s[0].toFixed(1)}, ${s[1].toFixed(1)})</span><span class="info-value">${s[3].toFixed(5)}</span>`;
+            sensorListEl.appendChild(row);
+        });
+    })();
+    </script>
+</body>
+</html>

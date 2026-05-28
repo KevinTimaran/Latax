@@ -1,58 +1,90 @@
-% Diapositiva 40
-
+%=============================================
+% DIAPOSITIVA FINAL UNIFICADA
 % Kevin
 %=============================================
-% Puntos 6, 7, 8: Significado físico del mínimo,
-% cómo interviene el cálculo multivariado,
-% importancia de las funciones de varias variables
-%=============================================
 
-\begin{frame}{El Mínimo: Significado Físico y Cálculo Multivariado}
+\begin{frame}{Conclusiones, Optimización y Validación del Modelo}
 
     \begin{columns}[T]
 
-        \column{0.50\textwidth}
+        %=========================================
+        % COLUMNA IZQUIERDA
+        %=========================================
+        \column{0.48\textwidth}
 
-        \begin{block}{Superficie de Error $E(x,y)$}
-            \centering
-            \includegraphics[width=0.95\textwidth]{Imagenes/superficie_error_3d.png}
-        \end{block}
-
-        \vspace{0.05cm}
-        \begin{center}
-            \tiny \textcolor{gray}{El mínimo (rojo) es el fondo del valle de error. Corte en $z=-1.10$ km, $A_0^*=10.0142$.}
-        \end{center}
-
-        \column{0.46\textwidth}
-
-        \begin{block}{¿Qué significa el mínimo?}
+        \begin{block}{Significado del Mínimo}
             \scriptsize
-            El mínimo no es solo un valor matemático pequeño: es la \textbf{ubicación que mejor explica físicamente} el comportamiento observado de la señal sísmica.
+            La función de error depende de cuatro variables:
+            \[
+                E(x,y,z,A_0)
+            \]
+
+            El objetivo fue encontrar el punto donde el error fuera mínimo:
             \[
                 m^* = \arg\min_{m \in \mathbb{R}^4} E(m)
             \]
+
+            Ese mínimo representa la ubicación espacial que mejor reproduce las amplitudes observadas por los sensores.
         \end{block}
 
         \vspace{0.15cm}
 
-        \begin{exampleblock}{Conexión con Cálculo Multivariado}
+        \begin{exampleblock}{Optimización con Gauss-Newton}
             \scriptsize
             \begin{itemize}
-                \item La función de error depende de \textbf{cuatro parámetros}:
-                \[
-                    E = E(x,\, y,\, z,\, A_0)
-                \]
-                \item Gauss-Newton \textbf{analiza y minimiza} dicha función iterativamente.
-                \item Las funciones de varias variables permiten modelar \textbf{fenómenos espaciales complejos}.
+                \item Identificó automáticamente la región de menor error.
+                \item Evitó evaluar infinitas combinaciones manualmente.
+                \item Convergió en solo \textbf{8 iteraciones}.
+                \item Precisión obtenida superior al \textbf{99.7\%}.
             \end{itemize}
         \end{exampleblock}
 
+        \vspace{0.15cm}
+
+        \begin{block}{Conclusión Principal}
+            \scriptsize
+            Resolver el mínimo de la función de error equivale físicamente a localizar la fuente sísmica.
+        \end{block}
+
+        %=========================================
+        % COLUMNA DERECHA
+        %=========================================
+        \column{0.48\textwidth}
+
+        \begin{block}{Validación del Modelo}
+            \centering
+            \includegraphics[width=0.95\textwidth]{Imagenes/superficie_error_3d.png}
+        \end{block}
+
+        \vspace{0.1cm}
+
+        \begin{block}{Limitaciones y Mejoras Futuras}
+            \scriptsize
+            \begin{itemize}
+                \item Se asumió un medio homogéneo.
+                \item El ruido afecta la precisión de las mediciones.
+                \item Más sensores mejorarían la resolución espacial.
+                \item Futuramente podrían incorporarse modelos físicos más complejos.
+            \end{itemize}
+        \end{block}
+
     \end{columns}
 
-    \vspace{0.15cm}
+    \vspace{0.2cm}
+
     \begin{center}
         \footnotesize
-        \textbf{Minimizar $E(x,y,z,A_0)$ es el núcleo de cálculo multivariado del proyecto.}
+        \textbf{
+        Este proyecto integró cálculo multivariado, geometría espacial y optimización
+        para resolver un problema inverso de localización sísmica.
+        }
+    \end{center}
+
+    \vspace{0.1cm}
+
+    \begin{center}
+        \small
+        \textcolor{blue}{\textbf{¡Gracias por su atención!}}
     \end{center}
 
 \end{frame}

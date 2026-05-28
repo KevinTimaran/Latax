@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animación de Cortes en z</title>
+    <style>
+        @import url('https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.0/300,400,500,600,700.css');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+        .container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .title {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .title span { color: #888; font-weight: 400; font-size: 13px; }
+        canvas {
+            border: 2px solid #333;
+            border-radius: 4px;
+            background: #000;
+        }
+        .controls {
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .controls button {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .controls button:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.4);
+        }
+        .controls button.active {
+            background: rgba(255,255,255,0.2);
+            border-color: #4CAF50;
+        }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .slider-container label {
+            color: #aaa;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .slider-container input[type="range"] {
+            width: 200px;
+            accent-color: #4CAF50;
+        }
+        .z-display {
+            color: #4CAF50;
+            font-size: 14px;
+            font-weight: 700;
+            min-width: 80px;
+            text-align: center;
+            font-family: 'Inter', monospace;
+        }
+        .legend {
+            display: flex;
+            gap: 16px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #ccc;
+            font-size: 11px;
+        }
+        .legend-item svg { flex-shrink: 0; }
+        .progress-bar {
+            width: 100%;
+            height: 3px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #4CAF50;
+            border-radius: 2px;
+            transition: width 0.05s linear;
+            width: 0%;
+        }
+        .info-bar {
+            display: flex;
+            gap: 24px;
+            margin-top: 8px;
+            color: #888;
+            font-size: 11px;
+        }
+        .info-bar span { font-weight: 600; color: #aaa; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">
+            Animación: Cortes de la función de error al variar z
+            <br><span>Proyecto: Localización de una fuente sísmica</span>
+        </div>
+        <canvas id="mainCanvas" width="720" height="600"></canvas>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="controls">
+            <button id="btnPlay">▶ Reproducir</button>
+            <button id="btnPause">⏸ Pausar</button>
+            <div class="slider-container">
+                <label>z:</label>
+                <div class="z-display" id="zDisplay">−3.000</div>
+                <input type="range" id="zSlider" min="0" max="99" value="0" step="1">
+            </div>
+        </div>
+        <div class="info-bar">
+            <div>Frame: <span id="frameNum">0</span> / 100</div>
+            <div>FPS: <span id="fpsDisplay">8</span></div>
+            <div>E_min: <span id="eminDisplay">—</span></div>
+        </div>
+        <div class="legend">
+            <div class="legend-item">
+                <svg width="16" height="16"><polygon points="8,2 14,14 2,14" fill="#222" stroke="#fff" stroke-width="1.5"/></svg>
+                Sensores
+            </div>
+            <div class="legend-item">
+                <svg width="16" height="16"><line x1="3" y1="3" x2="13" y2="13" stroke="#e03131" stroke-width="2.5"/><line x1="13" y1="3" x2="3" y2="13" stroke="#e03131" stroke-width="2.5"/></svg>
+                Fuente real
+            </div>
+            <div class="legend-item">
+                <svg width="16" height="16"><polygon points="8,1 10,6 15,6 11,9.5 12.5,14 8,11 3.5,14 5,9.5 1,6 6,6" fill="#ff9800" stroke="#333" stroke-width="0.8"/></svg>
+                Fuente estimada
+            </div>
+            <div class="legend-item">
+                <svg width="16" height="16"><circle cx="8" cy="8" r="5" fill="#00bcd4" stroke="#333" stroke-width="1.5"/></svg>
+                Mínimo del corte
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        const canvas = document.getElementById('mainCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const sensores = [
+            [-4.0, -3.0,  0.2, 0.005219],
+            [-2.5,  2.8, -0.1, 0.009811],
+            [ 0.0,  4.0,  0.1, 0.012014],
+            [ 3.5,  3.0, -0.2, 0.024570],
+            [ 4.5, -1.5,  0.0, 0.080580],
+            [ 2.0, -4.0,  0.3, 0.071733],
+            [-1.0, -4.5, -0.1, 0.027704],
+            [-4.5,  1.0,  0.2, 0.003556],
+            [ 0.5,  0.5,  0.0, 0.852685],
+            [ 2.8,  0.8, -0.3, 0.380182],
+            [-1.8, -1.2,  0.1, 0.119785],
+            [ 1.0,  3.2,  0.2, 0.037284],
+        ];
+
+        const A0 = 10.0;
+        const FUENTE_REAL = [1.2, -0.8, -1.1];
+        const FUENTE_ESTIMADA = [1.200079, -0.776502, -1.138095];
+
+        const N = 200;
+        const xMin = -5, xMax = 5;
+        const yMin = -5, yMax = 5;
+        const dx = (xMax - xMin) / (N - 1);
+        const dy = (yMax - yMin) / (N - 1);
+
+        function computeError(x, y, z) {
+            let sum = 0;
+            for (let i = 0; i < sensores.length; i++) {
+                const sx = sensores[i][0], sy = sensores[i][1], sz = sensores[i][2], Aobs = sensores[i][3];
+                const ddx = sx - x, ddy = sy - y, ddz = sz - z;
+                const Ri = Math.sqrt(ddx*ddx + ddy*ddy + ddz*ddz);
+                const Apred = A0 * Math.exp(-Ri) / Math.max(Ri, 1e-8);
+                sum += (Aobs - Apred) * (Aobs - Apred);
+            }
+            return sum;
+        }
+
+        function viridis(t) {
+            t = Math.max(0, Math.min(1, t));
+            const pal = [
+                [0.2670,0.0049,0.3294],[0.2788,0.0691,0.4199],[0.2706,0.1391,0.4854],
+                [0.2543,0.2092,0.5269],[0.2309,0.2778,0.5527],[0.2026,0.3444,0.5656],
+                [0.1733,0.4085,0.5698],[0.1442,0.4701,0.5656],[0.1174,0.5284,0.5549],
+                [0.0950,0.5832,0.5391],[0.0806,0.6343,0.5191],[0.0769,0.6814,0.4962],
+                [0.0946,0.7244,0.4710],[0.1379,0.7636,0.4435],[0.2095,0.7993,0.4136],
+                [0.3080,0.8316,0.3816],[0.4304,0.8605,0.3479],[0.5726,0.8855,0.3129],
+                [0.7303,0.9056,0.2772],[0.8972,0.9196,0.2435],[0.9931,0.9062,0.1439],
+            ];
+            const idx = t * (pal.length - 1);
+            const i = Math.floor(idx);
+            const f = idx - i;
+            if (i >= pal.length - 1) return pal[pal.length - 1];
+            return [
+                pal[i][0]+f*(pal[i+1][0]-pal[i][0]),
+                pal[i][1]+f*(pal[i+1][1]-pal[i][1]),
+                pal[i][2]+f*(pal[i+1][2]-pal[i][2])
+            ];
+        }
+
+        const NUM_FRAMES = 100;
+        const zValues = [];
+        for (let k = 0; k < NUM_FRAMES; k++) {
+            zValues.push(-3 + k * 4 / (NUM_FRAMES - 1));
+        }
+
+        const allErrors = [];
+        const allMinima = [];
+        let globalEmin = Infinity;
+
+        console.log("Precomputing...");
+        for (let f = 0; f < NUM_FRAMES; f++) {
+            const z = zValues[f];
+            const grid = new Float64Array(N * N);
+            let frameEmin = Infinity, frameEminX = 0, frameEminY = 0;
+            for (let i = 0; i < N; i++) {
+                for (let j = 0; j < N; j++) {
+                    const xVal = xMin + i * dx;
+                    const yVal = yMin + j * dy;
+                    const eVal = computeError(xVal, yVal, z);
+                    grid[i * N + j] = eVal;
+                    if (eVal < frameEmin) { frameEmin = eVal; frameEminX = xVal; frameEminY = yVal; }
+                    if (eVal < globalEmin) globalEmin = eVal;
+                }
+            }
+            allErrors.push(grid);
+            allMinima.push({ x: frameEminX, y: frameEminY, e: frameEmin });
+        }
+
+        const clippedErrors = [];
+        const vMaxValues = [];
+        for (let f = 0; f < NUM_FRAMES; f++) {
+            const grid = allErrors[f];
+            const sorted = Float64Array.from(grid).sort((a, b) => a - b);
+            const vMax = sorted[Math.floor(N * N * 0.95)];
+            vMaxValues.push(vMax);
+            const clipped = new Float64Array(N * N);
+            for (let i = 0; i < N * N; i++) clipped[i] = Math.min(grid[i], vMax);
+            clippedErrors.push(clipped);
+        }
+        console.log("Done.");
+
+        // ===================== MARCHING SQUARES - CONNECTED CONTOURS =====================
+        function marchingSquaresContour(grid, level, nx, ny) {
+            const lines = [];
+            // Each cell edge: store which contour line passes through it
+            // Edge indices: 0=top, 1=right, 2=bottom, 3=left
+            // Key: "i,j,edge" -> line index
+
+            const edgeMap = new Map();
+            let lineCount = 0;
+
+            function getEdgeKey(i, j, edge) { return `${i},${j},${edge}`; }
+
+            function interp(i, j, edge, v) {
+                const vals = [
+                    grid[i * nx + j],       // 0,0
+                    grid[i * nx + j + 1],   // 0,1
+                    grid[(i+1) * nx + j + 1], // 1,1
+                    grid[(i+1) * nx + j]    // 1,0
+                ];
+                const corners = [
+                    [j, i], [j + 1, i], [j + 1, i + 1], [j, i + 1]
+                ];
+                const pairs = [[0,1],[1,2],[2,3],[3,0]]; // top, right, bottom, left
+                const [a, b] = pairs[edge];
+                const va = vals[a], vb = vals[b];
+                const ca = corners[a], cb = corners[b];
+                const diff = vb - va;
+                if (Math.abs(diff) < 1e-12) return [(ca[0]+cb[0])/2, (ca[1]+cb[1])/2];
+                const t = (v - va) / diff;
+                return [ca[0] + t * (cb[0] - ca[0]), ca[1] + t * (cb[1] - ca[1])];
+            }
+
+            for (let i = 0; i < nx - 1; i++) {
+                for (let j = 0; j < ny - 1; j++) {
+                    const v00 = grid[i * nx + j];
+                    const v10 = grid[i * nx + j + 1];
+                    const v11 = grid[(i+1) * nx + j + 1];
+                    const v01 = grid[(i+1) * nx + j];
+
+                    let code = 0;
+                    if (v00 > level) code |= 1;
+                    if (v10 > level) code |= 2;
+                    if (v11 > level) code |= 4;
+                    if (v01 > level) code |= 8;
+
+                    if (code === 0 || code === 15) continue;
+
+                    // Determine which edges are crossed
+                    const crossed = [];
+                    // Top edge (between v00 and v10)
+                    if ((v00 > level) !== (v10 > level)) crossed.push(0);
+                    // Right edge (between v10 and v11)
+                    if ((v10 > level) !== (v11 > level)) crossed.push(1);
+                    // Bottom edge (between v11 and v01)
+                    if ((v11 > level) !== (v01 > level)) crossed.push(2);
+                    // Left edge (between v01 and v00)
+                    if ((v01 > level) !== (v00 > level)) crossed.push(3);
+
+                    if (crossed.length !== 2) continue;
+
+                    const [e1, e2] = crossed;
+                    const p1 = interp(i, j, e1, level);
+                    const p2 = interp(i, j, e2, level);
+
+                    const k1 = getEdgeKey(i, j, e1);
+                    const k2 = getEdgeKey(i, j, e2);
+
+                    const idx1 = edgeMap.get(k1);
+                    const idx2 = edgeMap.get(k2);
+
+                    if (idx1 !== undefined && idx2 !== undefined) {
+                        // Connect two existing lines
+                        const l1 = lines[idx1];
+                        const l2 = lines[idx2];
+                        if (l1 !== l2) {
+                            // Merge: append l2 to l1 or reverse l2
+                            const lastPt = l1[l1.length - 1];
+                            const firstPt2 = l2[0];
+                            const dist = Math.hypot(lastPt[0]-firstPt2[0], lastPt[1]-firstPt2[1]);
+                            if (dist < 2) {
+                                l1.push(...l2.slice(1));
+                            } else {
+                                const lastPt2 = l2[l2.length - 1];
+                                const dist2 = Math.hypot(lastPt[0]-lastPt2[0], lastPt[1]-lastPt2[1]);
+                                if (dist2 < 2) {
+                                    l2.reverse();
+                                    l1.push(...l2.slice(1));
+                                } else {
+                                    // Just connect anyway
+                                    l1.push(p1, ...l2, p2);
+                                }
+                            }
+                            // Update edge references
+                            for (const pt of l2) {
+                                // We don't track per-point edges, just merge
+                            }
+                            lines[idx2] = null; // Mark as merged
+                        }
+                    } else if (idx1 !== undefined) {
+                        // Extend existing line
+                        const l = lines[idx1];
+                        const lastPt = l[l.length - 1];
+                        const dist = Math.hypot(lastPt[0]-p1[0], lastPt[1]-p1[1]);
+                        if (dist < 2) {
+                            l.push(p2);
+                        } else {
+                            l.unshift(p1);
+                            l.push(p2);
+                        }
+                        edgeMap.set(k2, idx1);
+                    } else if (idx2 !== undefined) {
+                        const l = lines[idx2];
+                        const lastPt = l[l.length - 1];
+                        const dist = Math.hypot(lastPt[0]-p2[0], lastPt[1]-p2[1]);
+                        if (dist < 2) {
+                            l.push(p1);
+                        } else {
+                            l.unshift(p2);
+                            l.push(p1);
+                        }
+                        edgeMap.set(k1, idx2);
+                    } else {
+                        // New line
+                        const idx = lineCount++;
+                        lines.push([p1, p2]);
+                        edgeMap.set(k1, idx);
+                        edgeMap.set(k2, idx);
+                    }
+                }
+            }
+
+            // Filter out nulls and short lines
+            return lines.filter(l => l !== null && l.length > 1);
+        }
+
+        // ===================== DRAWING =====================
+        const W = canvas.width, H = canvas.height;
+        const margin = { top: 40, right: 80, bottom: 50, left: 60 };
+        const plotW = W - margin.left - margin.right;
+        const plotH = H - margin.top - margin.bottom;
+
+        function worldToCanvas(wx, wy) {
+            return [
+                margin.left + (wx - xMin) / (xMax - xMin) * plotW,
+                margin.top + (yMax - wy) / (yMax - yMin) * plotH
+            ];
+        }
+
+        // Heatmap
+        const heatCanvas = document.createElement('canvas');
+        heatCanvas.width = N;
+        heatCanvas.height = N;
+        const heatCtx = heatCanvas.getContext('2d');
+        const heatImg = heatCtx.createImageData(N, N);
+
+        function drawHeatmap(frameIdx) {
+            const clipped = clippedErrors[frameIdx];
+            const vMax = vMaxValues[frameIdx];
+            const data = heatImg.data;
+            for (let i = 0; i < N; i++) {
+                for (let j = 0; j < N; j++) {
+                    const eVal = clipped[i * N + j];
+                    const t = eVal / vMax;
+                    const [r, g, b] = viridis(t);
+                    const ci = i, cj = N - 1 - j;
+                    const idx = (cj * N + ci) * 4;
+                    data[idx] = r*255|0;
+                    data[idx+1] = g*255|0;
+                    data[idx+2] = b*255|0;
+                    data[idx+3] = 255;
+                }
+            }
+            heatCtx.putImageData(heatImg, 0, 0);
+        }
+
+        function drawContours(frameIdx) {
+            const clipped = clippedErrors[frameIdx];
+            const vMax = vMaxValues[frameIdx];
+            const numLevels = 14;
+            const levels = [];
+            for (let k = 1; k <= numLevels; k++) levels.push((k / numLevels) * vMax);
+
+            ctx.strokeStyle = 'rgba(255,255,255,0.65)';
+            ctx.lineWidth = 0.6;
+
+            for (const level of levels) {
+                const contourLines = marchingSquaresContour(clipped, level, N, N);
+                for (const line of contourLines) {
+                    if (line.length < 2) continue;
+                    ctx.beginPath();
+                    const [sx, sy] = worldToCanvas(xMin + line[0][0]*dx, yMin + line[0][1]*dy);
+                    ctx.moveTo(sx, sy);
+                    for (let k = 1; k < line.length; k++) {
+                        const [cx, cy] = worldToCanvas(xMin + line[k][0]*dx, yMin + line[k][1]*dy);
+                        ctx.lineTo(cx, cy);
+                    }
+                    ctx.stroke();
+                }
+            }
+        }
+
+        function drawGrid() {
+            ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+            ctx.lineWidth = 0.5;
+            for (let v = -5; v <= 5; v += 1) {
+                const [x1, y1] = worldToCanvas(v, yMin);
+                const [x2, y2] = worldToCanvas(v, yMax);
+                ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+                const [x3, y3] = worldToCanvas(xMin, v);
+                const [x4, y4] = worldToCanvas(xMax, v);
+                ctx.beginPath(); ctx.moveTo(x3, y3); ctx.lineTo(x4, y4); ctx.stroke();
+            }
+
+            ctx.fillStyle = 'rgba(255,255,255,0.5)';
+            ctx.font = '11px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            for (let v = -5; v <= 5; v += 1) {
+                const [cx, cy] = worldToCanvas(v, yMin);
+                ctx.fillText(v.toString(), cx, cy + 18);
+            }
+            ctx.textAlign = 'right';
+            for (let v = -5; v <= 5; v += 1) {
+                const [cx, cy] = worldToCanvas(xMin, v);
+                ctx.fillText(v.toString(), cx - 8, cy + 4);
+            }
+
+            ctx.fillStyle = 'rgba(255,255,255,0.45)';
+            ctx.font = '12px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('x [km]', margin.left + plotW/2, H - 8);
+            ctx.save();
+            ctx.translate(14, margin.top + plotH/2);
+            ctx.rotate(-Math.PI/2);
+            ctx.fillText('y [km]', 0, 0);
+            ctx.restore();
+        }
+
+        function drawSensors() {
+            for (let i = 0; i < sensores.length; i++) {
+                const [cx, cy] = worldToCanvas(sensores[i][0], sensores[i][1]);
+                ctx.fillStyle = '#fff';
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 1.2;
+                const s = 6;
+                ctx.beginPath();
+                ctx.moveTo(cx, cy - s);
+                ctx.lineTo(cx + s, cy + s*0.7);
+                ctx.lineTo(cx - s, cy + s*0.7);
+                ctx.closePath();
+                ctx.fill(); ctx.stroke();
+            }
+        }
+
+        function drawSourceReal() {
+            const [cx, cy] = worldToCanvas(FUENTE_REAL[0], FUENTE_REAL[1]);
+            ctx.strokeStyle = '#e03131';
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            const s = 9;
+            ctx.beginPath();
+            ctx.moveTo(cx-s, cy-s); ctx.lineTo(cx+s, cy+s);
+            ctx.moveTo(cx+s, cy-s); ctx.lineTo(cx-s, cy+s);
+            ctx.stroke();
+            ctx.fillStyle = 'rgba(224,49,49,0.12)';
+            ctx.beginPath(); ctx.arc(cx, cy, 14, 0, Math.PI*2); ctx.fill();
+        }
+
+        function drawSourceEstimated() {
+            const [cx, cy] = worldToCanvas(FUENTE_ESTIMADA[0], FUENTE_ESTIMADA[1]);
+            ctx.fillStyle = '#ff9800';
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 1;
+            const s = 10;
+            ctx.beginPath();
+            for (let k = 0; k < 10; k++) {
+                const angle = (k*Math.PI)/5 - Math.PI/2;
+                const r = k%2===0 ? s : s*0.4;
+                const px = cx + r*Math.cos(angle), py = cy + r*Math.sin(angle);
+                if (k===0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            }
+            ctx.closePath(); ctx.fill(); ctx.stroke();
+        }
+
+        function drawMinimum(frameIdx) {
+            const min = allMinima[frameIdx];
+            const [cx, cy] = worldToCanvas(min.x, min.y);
+            ctx.fillStyle = '#00bcd4';
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.arc(cx, cy, 7, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = 'rgba(0,188,212,0.12)';
+            ctx.beginPath(); ctx.arc(cx, cy, 12, 0, Math.PI*2); ctx.fill();
+        }
+
+        function drawColorBar() {
+            const barX = W - margin.right + 10;
+            const barY = margin.top;
+            const barW = 16, barH = plotH;
+            for (let py = 0; py < barH; py++) {
+                const t = 1 - py/barH;
+                const [r, g, b] = viridis(t);
+                ctx.fillStyle = `rgb(${r*255|0},${g*255|0},${b*255|0})`;
+                ctx.fillRect(barX, barY+py, barW, 1);
+            }
+            ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(barX, barY, barW, barH);
+
+            ctx.fillStyle = 'rgba(255,255,255,0.55)';
+            ctx.font = '10px Inter, monospace';
+            ctx.textAlign = 'left';
+            const vMax = vMaxValues[currentFrame];
+            for (let l = 0; l <= 1; l += 0.25) {
+                const val = (l * vMax).toFixed(1);
+                const py = barY + (1-l)*barH;
+                ctx.fillText(val, barX + barW + 4, py + 3);
+            }
+            ctx.save();
+            ctx.translate(barX + barW + 22, barY + barH/2);
+            ctx.rotate(-Math.PI/2);
+            ctx.fillStyle = 'rgba(255,255,255,0.5)';
+            ctx.font = '11px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Error E', 0, 0);
+            ctx.restore();
+        }
+
+        let currentFrame = 0;
+
+        function drawFrame(frameIdx) {
+            ctx.clearRect(0, 0, W, H);
+            drawHeatmap(frameIdx);
+            ctx.imageSmoothingEnabled = true;
+            ctx.drawImage(heatCanvas, margin.left, margin.top, plotW, plotH);
+            drawGrid();
+            drawContours(frameIdx);
+            drawSensors();
+            drawSourceReal();
+            drawSourceEstimated();
+            drawMinimum(frameIdx);
+            drawColorBar();
+
+            const z = zValues[frameIdx];
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 14px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(`Corte de la función de error para z = ${z.toFixed(3)}`, W/2, 22);
+
+            document.getElementById('zDisplay').textContent = z.toFixed(3);
+            document.getElementById('frameNum').textContent = frameIdx;
+            document.getElementById('eminDisplay').textContent = allMinima[frameIdx].e.toExponential(3);
+            document.getElementById('progressFill').style.width = (frameIdx/NUM_FRAMES*100)+'%';
+        }
+
+        let playing = false;
+        let animId = null;
+        let lastTime = 0;
+        const FPS = 8;
+        const frameInterval = 1000 / FPS;
+
+        function animate(ts) {
+            if (!playing) return;
+            if (ts - lastTime >= frameInterval) {
+                lastTime = ts;
+                currentFrame = (currentFrame + 1) % NUM_FRAMES;
+                document.getElementById('zSlider').value = currentFrame;
+                drawFrame(currentFrame);
+            }
+            animId = requestAnimationFrame(animate);
+        }
+
+        document.getElementById('btnPlay').addEventListener('click', () => {
+            if (playing) return;
+            playing = true; lastTime = 0;
+            animId = requestAnimationFrame(animate);
+            document.getElementById('btnPlay').classList.add('active');
+            document.getElementById('btnPause').classList.remove('active');
+        });
+
+        document.getElementById('btnPause').addEventListener('click', () => {
+            playing = false;
+            if (animId) cancelAnimationFrame(animId);
+            document.getElementById('btnPlay').classList.remove('active');
+            document.getElementById('btnPause').classList.remove('active');
+        });
+
+        document.getElementById('zSlider').addEventListener('input', (e) => {
+            currentFrame = parseInt(e.target.value);
+            playing = false;
+            if (animId) cancelAnimationFrame(animId);
+            document.getElementById('btnPlay').classList.remove('active');
+            document.getElementById('btnPause').classList.remove('active');
+            drawFrame(currentFrame);
+        });
+
+        drawFrame(0);
+    })();
+    </script>
+</body>
+</html>
+
